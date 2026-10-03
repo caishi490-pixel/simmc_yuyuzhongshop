@@ -223,11 +223,16 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 #escOut .nm{color:#66ff99}
 #escOut .hx{color:#00ff41}
 @media (max-width:640px){#escapeStage{padding:14px;font-size:11px}}
+/* ===== 开场按钮 ===== */
+.startWrap{opacity:0;transition:opacity 1.1s ease;margin:38px 0 8px}
+.startWrap.on{opacity:1}
+.startBtn{display:inline-block;padding:14px 42px;border-radius:999px;border:1px solid rgba(87,215,255,.4);background:rgba(10,40,55,.6);color:#dff3ff;font-size:16px;letter-spacing:.24em;cursor:pointer;transition:all .3s ease}
+.startBtn:hover{background:rgba(20,70,95,.8);box-shadow:0 0 32px rgba(87,215,255,.35);transform:scale(1.04)}
 </style>
 </head>
 <body>
 <canvas id="sea"></canvas>
-<audio id="bgm" src="audio/bgm.mp3" loop preload="none"></audio>
+<audio id="bgm" src="audio/theme.mp3" loop preload="none"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
 
@@ -236,6 +241,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
     <p class="kicker">鱼鱼中 · 明天 还是 昨天？</p>
     <h1 class="shatter" id="title"><span>本</span><span>地</span><span>缓</span><span>存</span></h1>
     <p class="sub">没有人叫它名字的时候，它不「在」。</p>
+    <div class="startWrap" id="startWrap"><div class="startBtn" id="startBtn">开始</div></div>
     <section class="hook" id="hook"></section>
     <section class="lines" id="lines">
       <p>这里不过冬，也不开春。没有雪，也没有化雪的季节。</p>
@@ -569,12 +575,18 @@ function playHook(done){
   }
   next();
 }
-playHook(function(){
+setTimeout(function(){document.getElementById("startWrap").classList.add("on");},900);
+document.getElementById("startBtn").addEventListener("click",function(){
+  document.getElementById("startWrap").classList.remove("on");
+  setTimeout(function(){document.getElementById("startWrap").style.display="none";},700);
+  try{bgm.volume=0.45;bgm.play().catch(function(){});}catch(e){}
+  playHook(function(){
   var ps=document.querySelectorAll("#lines p");
   for(var i=0;i<ps.length;i++)(function(p,idx){setTimeout(function(){p.classList.add("on");scrollToEl(p);},250+idx*780);})(ps[i],i);
   setTimeout(function(){var hf=document.getElementById("hookfinal");hf.classList.add("on");scrollToEl(hf);},250+ps.length*780+400);
   setTimeout(function(){var cb=document.getElementById("call");cb.classList.add("on");scrollToEl(cb);},250+ps.length*780+2600);
-});
+  });
+}, {once:true});
 
 /* ---------- 3 开机日志 ---------- */
 var bootBox=document.getElementById("boot");
@@ -600,9 +612,6 @@ function runBoot(done){
 
 /* ---------- 2 按钮 ---------- */
 var bgm=document.getElementById("bgm");
-document.getElementById("call").addEventListener("click",function(){
-  try{bgm.volume=0.42;bgm.play().catch(function(){});}catch(e){}
-}, {once:true});
 function fadeBgm(){
   try{
     var v=bgm.volume,t=setInterval(function(){
@@ -623,6 +632,7 @@ document.getElementById("call").addEventListener("click",function(){
 
 /* ---------- 4/5 点击窗口 -> 聊天 ---------- */
 document.getElementById("wincard").addEventListener("click",function(){
+  fadeBgm();
   document.getElementById("cardStage").classList.remove("on");
   setTimeout(function(){
     document.getElementById("appStage").classList.add("on");
