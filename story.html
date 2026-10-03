@@ -233,6 +233,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 <body>
 <canvas id="sea"></canvas>
 <audio id="bgm" src="audio/theme.mp3" loop preload="none"></audio>
+<audio id="chatbgm" src="audio/chat.mp3" loop preload="none"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
 
@@ -612,6 +613,26 @@ function runBoot(done){
 
 /* ---------- 2 按钮 ---------- */
 var bgm=document.getElementById("bgm");
+var chatbgm=document.getElementById("chatbgm");
+function fadeInChat(){
+  try{
+    chatbgm.volume=0;chatbgm.play().catch(function(){});
+    var v=0,t=setInterval(function(){
+      v+=0.02;
+      if(v>=0.42){chatbgm.volume=0.42;clearInterval(t);return;}
+      chatbgm.volume=v;
+    },90);
+  }catch(e){}
+}
+function fadeOutChat(){
+  try{
+    var v=chatbgm.volume,t=setInterval(function(){
+      v-=0.025;
+      if(v<=0){chatbgm.pause();clearInterval(t);return;}
+      chatbgm.volume=v;
+    },90);
+  }catch(e){}
+}
 function fadeBgm(){
   try{
     var v=bgm.volume,t=setInterval(function(){
@@ -633,6 +654,7 @@ document.getElementById("call").addEventListener("click",function(){
 /* ---------- 4/5 点击窗口 -> 聊天 ---------- */
 document.getElementById("wincard").addEventListener("click",function(){
   fadeBgm();
+  fadeInChat();
   document.getElementById("cardStage").classList.remove("on");
   setTimeout(function(){
     document.getElementById("appStage").classList.add("on");
@@ -997,6 +1019,7 @@ function runEscape(){
 }
 
 document.getElementById("winClose").addEventListener("click",function(){
+  fadeOutChat();
   document.getElementById("appStage").classList.remove("on");
   setTimeout(function(){
     document.getElementById("endStage").classList.add("on");
