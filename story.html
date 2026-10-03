@@ -211,7 +211,9 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 /* ===== 逃逸段 ===== */
 #escapeStage{position:fixed;inset:0;z-index:12;background:rgba(0,0,0,.94);opacity:0;pointer-events:none;transition:opacity 1s ease;overflow:hidden;padding:22px 28px;font-family:Courier New,monospace;font-size:14px;line-height:1.25;color:#00ff41}
 #escapeStage.on{opacity:1;pointer-events:auto}
-#escOut{position:relative;transition:transform .16s linear;will-change:transform}
+#escArt{position:absolute;inset:0;background:url(assets/ami-break.png) center center/contain no-repeat;opacity:0;transition:opacity 2.4s ease;z-index:0;pointer-events:none}
+#escArt.on{opacity:.3}
+#escOut{position:relative;transition:transform .16s linear;will-change:transform;z-index:1}
 #escOut div{white-space:pre;opacity:0;animation:escIn .04s ease forwards;text-shadow:0 0 5px rgba(0,255,65,.45)}
 @keyframes escIn{to{opacity:1}}
 #escOut .wn{color:#ffcc00;text-shadow:0 0 6px rgba(255,204,0,.4)}
@@ -296,7 +298,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 
 <div class="actEnter" id="actEnter"><img src="assets/caishi-avatar-132.png" alt=""><span>点开看看</span></div>
 
-<section id="escapeStage"><div id="escOut"></div></section>
+<section id="escapeStage"><div id="escArt"></div><div id="escOut"></div></section>
 
 <section id="appStage">
   <div class="app" id="app">
@@ -1019,6 +1021,7 @@ var d=document.createElement("div");d.className=(c||"");d.textContent=t;box.appe
 var over=box.scrollHeight-st.clientHeight+40;if(over>0)box.style.transform="translateY(-"+over+"px)";}
 function runEscape(){
   fadeBgm();
+  document.getElementById("escArt").classList.add("on");
   var stage=document.getElementById("escapeStage"),box=document.getElementById("escOut");
   stage.style.opacity="";stage.classList.add("on");
   box.innerHTML="";box.style.transform="";
