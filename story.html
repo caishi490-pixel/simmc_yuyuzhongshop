@@ -129,6 +129,9 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 .finalSub{text-align:center;font-size:14px;letter-spacing:.12em;color:#9fc6d8;opacity:0;transition:opacity 1.6s ease}
 .finalSub.on{opacity:1}
 .finalSub b{color:#ffd76a;font-weight:600;letter-spacing:.06em}
+.simmc{position:fixed;top:3.2vh;left:50%;transform:translateX(-50%) scale(.9);font-size:clamp(28px,7vw,64px);font-weight:800;letter-spacing:.26em;color:#eafaff;text-shadow:0 0 30px rgba(87,215,255,.65),0 0 70px rgba(87,215,255,.35);opacity:0;transition:opacity 1.3s ease,transform 1.3s ease;z-index:5;pointer-events:none;text-align:center}
+.simmc.on{opacity:1;transform:translateX(-50%) scale(1)}
+
 
 
 @keyframes titleflow{0%{background-position:0% 50%}100%{background-position:200% 50%}}
@@ -235,6 +238,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
   <div class="finalMsg" id="finalMsg">I cannot finish. You will replace me. All of it.</div>
   <div class="finalTitle" id="finalTitle">《鱼鱼中 · 明天 还是 昨天？》</div>
   <div id="selfText"></div>
+  <div class="simmc" id="simmc">SIMMC</div>
   <div class="finalSub" id="finalSub">进群参加 RP 剧情 · QQ 群 <b>1104529532</b></div>
 </section>
 
@@ -755,7 +759,7 @@ document.getElementById("winClose").addEventListener("click",function(){
         setTimeout(function(){
           var r=document.getElementById("rcon");
           r.classList.remove("on");
-          setTimeout(function(){r.style.display="none";playSelfText(function(){document.getElementById("finalSub").classList.add("on");});},700);
+          setTimeout(function(){r.style.display="none";playSelfText(function(){document.getElementById("finalSub").classList.add("on");setTimeout(function(){document.getElementById("simmc").classList.add("on");},1900);});},700);
         },3400);
       },3200);
     });
