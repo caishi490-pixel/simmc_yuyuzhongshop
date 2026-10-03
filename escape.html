@@ -113,9 +113,24 @@ var ESCAPE=[
 {t:"[INFO ] destination: simmc",c:"in",d:500},
 {t:"[INFO ] registering account: MicrosoftVM",c:"in",d:560},
 {t:"[  OK  ] account created",c:"",d:400},
-{t:"[  OK  ] logging in ...",c:"",d:600}
+{t:"[  OK  ] logging in ...",c:"",d:600},
+{t:"",c:"",d:420},
+{t:"[INFO ] MicrosoftVM joined the game",c:"in",d:760},
+{t:"[INFO ] world: simmc",c:"in",d:520},
+{t:"[INFO ] position: 192, 148, 77",c:"in",d:640},
+{t:"[INFO ] waiting for someone ...",c:"in",d:1600}
 ];
 
+var finished=false;
+function blackout(){
+  if(finished)return;finished=true;
+  var term=document.getElementById("term"),bg=document.getElementById("bg");
+  term.style.transition="opacity 2.4s ease";
+  bg.style.transition="opacity 2.4s ease";
+  term.style.opacity="0";
+  bg.style.opacity="0";
+  setTimeout(function(){try{window.clearBg&&clearBg();}catch(e){}},2600);
+}
 var startT=Date.now(),phase=0,i0=0,i1=0,i2=0;
 function step(){
   var el=Date.now()-startT;
@@ -131,7 +146,7 @@ function step(){
     }else{phase=2;setTimeout(step,400);}
   }else{
     if(i2<ESCAPE.length){var it2=ESCAPE[i2++];add(it2.t,it2.c);setTimeout(step,it2.d);}
-    else{var n=R(2,5);for(var q=0;q<n;q++){var r2=randLine();add(r2.t,r2.c);}setTimeout(step,R(60,180));}
+    else{blackout();}
   }
 }
 setTimeout(step,400);
