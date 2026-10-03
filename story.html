@@ -1155,6 +1155,7 @@ function playTalkWq(i){
 
 document.getElementById("winClose").addEventListener("click",function(){
   fadeOutChat();fadeOutWq();
+  (function(){var c=document.getElementById("cryArt");c.classList.remove("on");setTimeout(function(){c.style.display="none";},1000);})();
   document.getElementById("appStage").classList.remove("on");
   setTimeout(function(){
     document.getElementById("endStage").classList.add("on");
