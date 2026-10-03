@@ -145,11 +145,8 @@ function step(){
     if(i0<BOOT.length){
       var it=BOOT[i0++];
       if(it.t==="ASCII"){
-        o.innerHTML="";o.style.transform="";cnt=0;o.style.transition="none";
-        add(" ");add(" ");add(" ");add(" ");add(" ");
         for(var k=0;k<ASCII.length;k++)add(ASCII[k],"cm");
-        setTimeout(function(){o.style.transition="transform .16s linear";},60);
-        setTimeout(step,2000);
+        setTimeout(step,1200);
       }else{add(it.t,it.c);setTimeout(step,it.d);}
     }
     else{var r=randLine();add(r.t,r.c);setTimeout(step,R(50,140));}
