@@ -240,6 +240,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 <audio id="bgm" src="audio/theme.mp3" loop preload="none"></audio>
 <audio id="chatbgm" src="audio/chat.mp3" loop preload="none"></audio>
 <audio id="wqbgm" src="audio/weiqiao.mp3" loop preload="none"></audio>
+<audio id="escbgm" src="audio/escape.mp3" loop preload="none"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
 
@@ -622,6 +623,26 @@ function runBoot(done){
 var bgm=document.getElementById("bgm");
 var chatbgm=document.getElementById("chatbgm");
 var wqbgm=document.getElementById("wqbgm");
+var escbgm=document.getElementById("escbgm");
+function fadeInEsc(){
+  try{
+    escbgm.volume=0;escbgm.play().catch(function(){});
+    var v=0,t=setInterval(function(){
+      v+=0.02;
+      if(v>=0.5){escbgm.volume=0.5;clearInterval(t);return;}
+      escbgm.volume=v;
+    },90);
+  }catch(e){}
+}
+function fadeOutEsc(){
+  try{
+    var v=escbgm.volume,t=setInterval(function(){
+      v-=0.025;
+      if(v<=0){escbgm.pause();clearInterval(t);return;}
+      escbgm.volume=v;
+    },90);
+  }catch(e){}
+}
 function fadeInWq(){
   try{
     wqbgm.volume=0;wqbgm.play().catch(function(){});
@@ -1020,7 +1041,7 @@ function escAdd(t,c){var box=document.getElementById("escOut"),st=document.getEl
 var d=document.createElement("div");d.className=(c||"");d.textContent=t;box.appendChild(d);
 var over=box.scrollHeight-st.clientHeight+40;if(over>0)box.style.transform="translateY(-"+over+"px)";}
 function runEscape(){
-  fadeBgm();
+  fadeBgm();fadeInEsc();
   document.getElementById("escArt").classList.add("on");
   var stage=document.getElementById("escapeStage"),box=document.getElementById("escOut");
   stage.style.opacity="";stage.classList.add("on");
@@ -1042,7 +1063,7 @@ function runEscape(){
       else{phase=2;setTimeout(step,400);}
     }else{
       if(i2<ESC_GO.length){var c2=ESC_GO[i2++];escAdd(c2.t,c2.c);setTimeout(step,c2.d);}
-      else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";}
+      else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";fadeOutEsc();}
     }
   }
   step();
