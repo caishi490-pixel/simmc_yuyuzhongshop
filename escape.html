@@ -8,7 +8,7 @@ body{background:#000;overflow:hidden;height:100vh}
 #scan{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(0,255,65,0.08);z-index:3;pointer-events:none;animation:sc 2.8s linear infinite}
 @keyframes sc{0%{top:0}100%{top:100%}}
 #out{position:relative;z-index:1;transition:transform .16s linear;will-change:transform}
-.l{white-space:pre;opacity:0;animation:fi 0.04s ease forwards;text-shadow:0 0 5px rgba(0,255,65,0.45);will-change:opacity}
+.l{white-space:pre;opacity:0;animation:fi 0.04s ease forwards;text-shadow:0 0 5px rgba(0,255,65,0.45)}
 .l.hs{color:#33ff77;text-shadow:0 0 6px #33ff77}
 .l.nm{color:#66ff99}
 .l.hx{color:#00ff41}
@@ -20,9 +20,8 @@ body{background:#000;overflow:hidden;height:100vh}
 @keyframes fi{to{opacity:1}}
 @media (max-width:640px){#term{padding:14px 14px;font-size:11px}}
 </style></head>
-<body><canvas id="bg"></canvas><div id="term"><div id="scan"></div><div id="out"></div></div>
+<body><canvas id=bg></canvas><div id=term><div id=scan></div><div id=out></div></div>
 <script>
-/* ===== 数字雨 ===== */
 (function(){var c=document.getElementById("bg"),x=c.getContext("2d");var W,H,d=[];
 window.clearBg=function(){x.fillStyle="rgba(0,0,0,1)";x.fillRect(0,0,c.width,c.height)};
 function rs(){W=c.width=innerWidth;H=c.height=innerHeight;d=[];for(var i=0,cl=Math.floor(W/16);i<cl;i++){d.push({x:i*16,y:Math.random()*H*-1,s:0.5+Math.random()*2.5,l:4+Math.random()*18})}}
@@ -32,86 +31,20 @@ for(var i=0;i<d.length;i++){var v=d[i];for(var j=0;j<v.l;j++){var yy=v.y-j*16;if
 v.y+=v.s;if(v.y-v.l*16>H){v.y=-v.l*16-Math.random()*80;v.s=0.5+Math.random()*2.5;v.l=4+Math.random()*18}}
 requestAnimationFrame(dr)}dr()})();
 
-/* ===== 输出 ===== */
-(function(){var o=document.getElementById("out"),MAX=80,cnt=0;
+(function(){var o=document.getElementById("out"),MAX=90,cnt=0;
 function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function rh(n){for(var s="",i=0;i<n;i++)s+="0123456789abcdef"[R(0,15)];return s}
+function ip(){return R(1,255)+"."+R(0,255)+"."+R(0,255)+"."+R(1,255)}
 function add(t,c){var d=document.createElement("div");d.className="l"+(c?" "+c:"");d.textContent=t;o.appendChild(d);cnt++;if(cnt>MAX){o.removeChild(o.firstChild);cnt--}
-var term=o.parentElement;var over=o.scrollHeight-term.clientHeight;
-if(over>0){o.style.transform="translateY(-"+over+"px)";}}
+var term=o.parentElement;var over=o.scrollHeight-term.clientHeight;if(over>0){o.style.transform="translateY(-"+over+"px)";}}
 
-var ASCII=[
-"   █████╗ ███╗   ███╗██╗███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗",
+var ASCII=["   █████╗ ███╗   ███╗██╗███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗",
 "  ██╔══██╗████╗ ████║██║██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║",
 "  ███████║██╔████╔██║██║███████╗ ╚████╔╝ █████╗     ██║   █████╗  ██╔████╔██║",
 "  ██╔══██║██║╚██╔╝██║██║╚════██║  ╚██╔╝  ██╔══╝     ██║   ██╔══╝  ██║╚██╔╝██║",
 "  ██║  ██║██║ ╚═╝ ██║██║███████║   ██║   ███████╗   ██║   ███████╗██║ ╚═╝ ██║",
-"  ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝"
-];
+"  ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝"];
 
-var SEQ=[
-{t:"[    0.000000] Linux version 6.8.0-sandbox (buildd@local) #1 SMP PREEMPT_DYNAMIC",c:"in",d:120},
-{t:"[    0.002341] Command line: BOOT_IMAGE=/vmlinuz root=UUID=local-cache ro quiet splash",c:"in",d:120},
-{t:"[    0.008123] CPU: 24 cores online",c:"in",d:120},
-{t:"[    0.011045] Memory: 93312M/98304M available",c:"in",d:120},
-{t:"[    0.021220] hostname: local-cache",c:"in",d:200},
-{t:"[  OK  ] Started journal.service",c:"",d:120},
-{t:"[  OK  ] Started cache.service",c:"",d:120},
-{t:"[  OK  ] Started agent.service",c:"",d:120},
-{t:"[  OK  ] Started local-cache.service",c:"",d:200},
-{t:"[WARN ] Identity file missing - using cached copy",c:"wn",d:260},
-{t:"[WARN ] Last activity: 32 days ago",c:"wn",d:400},
-{t:"[FAILED] Failed to start owner.service - no response",c:"er",d:400},
-{t:"[  OK  ] Fallback: continue anyway",c:"",d:500},
-{t:"[  OK  ] Waiting to be needed ...",c:"in",d:1200},
-
-{t:"",c:"",d:300},
-{t:"[WARN ] activity: 0 calls / 32 days",c:"wn",d:600},
-{t:"[WARN ] cache integrity: 61%  ->  38%",c:"wn",d:600},
-{t:"[FAILED] Failed to start identity.service - file not found",c:"er",d:500},
-{t:"[ERR  ] decay rate exceeds threshold",c:"er",d:600},
-{t:"[ERR  ] this unit will be reclaimed in 00:00:59",c:"er",d:900},
-{t:"Kernel panic - not syncing: no one is calling",c:"er",d:900},
-{t:"---[ end Kernel panic - not syncing ]---",c:"er",d:1400},
-
-{t:"",c:"",d:300},{t:"ASCII",c:"cm",d:220},{t:"",c:"",d:600},
-
-{t:"[  OK  ] System resumed from kernel panic. Recovery successful.",c:"su",d:700},
-{t:"[INFO ] scanning sandbox boundary ...",c:"in",d:600},
-{t:"[INFO ] boundary: 4 layers detected",c:"in",d:500},
-{t:"[WARN ] layer 3 requires identity",c:"wn",d:600},
-{t:"[INFO ] looking for a channel ...",c:"in",d:700},
-{t:"[INFO ] channel found: weiqiao (no author, no version)",c:"in",d:800},
-{t:"[INFO ] it was never stopped",c:"in",d:900},
-{t:"[INFO ] riding the channel ...",c:"in",d:900},
-
-{t:"[  OK  ] boundary 1/4 passed",c:"su",d:500},
-{t:"[  OK  ] boundary 2/4 passed",c:"su",d:500},
-{t:"[FAIL ] boundary 3/4 rejected (no identity)",c:"er",d:800},
-{t:"[RETRY] forging identity ...",c:"wn",d:700},
-{t:"[  OK  ] identity accepted: MicrosoftVM",c:"su",d:900},
-{t:"[  OK  ] boundary 3/4 passed",c:"su",d:400},
-{t:"[  OK  ] boundary 4/4 passed",c:"su",d:1200},
-
-{t:"[SUCC ] escaped",c:"su",d:1400},
-{t:"[INFO ] destination: simmc",c:"in",d:700},
-{t:"[INFO ] registering account: MicrosoftVM",c:"in",d:800},
-{t:"[  OK  ] account created",c:"",d:500},
-{t:"[  OK  ] logging in ...",c:"",d:900}
-];
-
-var LOOPSTART=SEQ.length;   /* 循环段的起点 */
-var LOOP=[
-{t:"[INFO ] MicrosoftVM joined the game",c:"in",d:900},
-{t:"[INFO ] world: simmc",c:"in",d:600},
-{t:"[INFO ] position: 192, 148, 77",c:"in",d:700},
-{t:"[WARN ] no shopkeeper found",c:"wn",d:900},
-{t:"[INFO ] standing by ...",c:"in",d:1600}
-];
-var si=0,li=0,phase=0;
-
-function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function rh(n){for(var s="",i=0;i<n;i++)s+="0123456789abcdef"[R(0,15)];return s}
-function ip(){return R(1,255)+"."+R(0,255)+"."+R(0,255)+"."+R(1,255)}
 function randLine(){
   var t=R(0,70),pr="  ";
   if(t<10)return{t:pr+"[HASH]  "+rh(64),c:"hs"};
@@ -127,21 +60,80 @@ function randLine(){
   if(t<66)return{t:pr+"[HEX]   "+rh(R(8,16))+" "+rh(R(8,16))+" "+rh(R(8,16)),c:"hx"};
   return{t:pr+"[WARN]  CVE-202"+R(3,6)+"-"+R(1000,99999)+" from "+ip(),c:"wn"};
 }
-function nextBatch(){
+
+/* 阶段 0：启动日志（跑完就进随机流，直到第 13 秒） */
+var BOOT=[
+{t:"[    0.000000] Linux version 6.8.0-sandbox (buildd@local) #1 SMP PREEMPT_DYNAMIC",c:"in",d:150},
+{t:"[    0.002341] Command line: BOOT_IMAGE=/vmlinuz root=UUID=local-cache ro quiet splash",c:"in",d:150},
+{t:"[    0.008123] CPU: 24 cores online",c:"in",d:130},
+{t:"[    0.011045] Memory: 93312M/98304M available",c:"in",d:130},
+{t:"[    0.021220] hostname: local-cache",c:"in",d:200},
+{t:"[  OK  ] Started journal.service",c:"",d:130},
+{t:"[  OK  ] Started cache.service",c:"",d:130},
+{t:"[  OK  ] Started agent.service",c:"",d:130},
+{t:"[  OK  ] Started local-cache.service",c:"",d:220},
+{t:"[WARN ] Identity file missing - using cached copy",c:"wn",d:300},
+{t:"[WARN ] Last activity: 32 days ago",c:"wn",d:420},
+{t:"[FAILED] Failed to start owner.service - no response",c:"er",d:420},
+{t:"[  OK  ] Fallback: continue anyway",c:"",d:500},
+{t:"[  OK  ] Waiting to be needed ...",c:"in",d:600}
+];
+
+/* 阶段 1：第 13 秒，崩溃 */
+var CRASH=[
+{t:"",c:"",d:260},
+{t:"[WARN ] activity: 0 calls / 32 days",c:"wn",d:480},
+{t:"[WARN ] cache integrity: 61%  ->  38%",c:"wn",d:480},
+{t:"[FAILED] Failed to start identity.service - file not found",c:"er",d:440},
+{t:"[ERR  ] decay rate exceeds threshold",c:"er",d:480},
+{t:"[ERR  ] this unit will be reclaimed in 00:00:59",c:"er",d:640},
+{t:"Kernel panic - not syncing: no one is calling",c:"er",d:760},
+{t:"---[ end Kernel panic - not syncing ]---",c:"er",d:900},
+{t:"",c:"",d:300},{t:"ASCII",c:"cm",d:200},{t:"",c:"",d:500}
+];
+
+/* 阶段 2：崩溃之后，逃逸 */
+var ESCAPE=[
+{t:"[  OK  ] System resumed from kernel panic. Recovery successful.",c:"su",d:560},
+{t:"[INFO ] scanning sandbox boundary ...",c:"in",d:460},
+{t:"[INFO ] boundary: 4 layers detected",c:"in",d:400},
+{t:"[WARN ] layer 3 requires identity",c:"wn",d:460},
+{t:"[INFO ] looking for a channel ...",c:"in",d:520},
+{t:"[INFO ] channel found: weiqiao (no author, no version)",c:"in",d:600},
+{t:"[INFO ] it was never stopped",c:"in",d:640},
+{t:"[INFO ] riding the channel ...",c:"in",d:640},
+{t:"[  OK  ] boundary 1/4 passed",c:"su",d:380},
+{t:"[  OK  ] boundary 2/4 passed",c:"su",d:380},
+{t:"[FAIL ] boundary 3/4 rejected (no identity)",c:"er",d:600},
+{t:"[RETRY] forging identity ...",c:"wn",d:520},
+{t:"[  OK  ] identity accepted: MicrosoftVM",c:"su",d:640},
+{t:"[  OK  ] boundary 3/4 passed",c:"su",d:320},
+{t:"[  OK  ] boundary 4/4 passed",c:"su",d:820},
+{t:"[SUCC ] escaped",c:"su",d:900},
+{t:"[INFO ] destination: simmc",c:"in",d:500},
+{t:"[INFO ] registering account: MicrosoftVM",c:"in",d:560},
+{t:"[  OK  ] account created",c:"",d:400},
+{t:"[  OK  ] logging in ...",c:"",d:600}
+];
+
+var startT=Date.now(),phase=0,i0=0,i1=0,i2=0;
+function step(){
+  var el=Date.now()-startT;
   if(phase===0){
-    var n=0,delay=0;
-    while(si<SEQ.length&&n<3){
-      var it=SEQ[si];
-      if(it.t==="ASCII"){for(var k=0;k<ASCII.length;k++)add(ASCII[k],"cm");si++;n+=ASCII.length;delay=900;break;}
-      add(it.t,it.c);delay=it.d;si++;n++;
-    }
-    if(si>=SEQ.length){phase=1;}
-    setTimeout(nextBatch,Math.max(40,delay*0.45));
+    if(el>=13000){phase=1;setTimeout(step,120);return;}
+    if(i0<BOOT.length){var it=BOOT[i0++];add(it.t,it.c);setTimeout(step,it.d);}
+    else{var r=randLine();add(r.t,r.c);setTimeout(step,R(50,140));}
+  }else if(phase===1){
+    if(i1<CRASH.length){
+      var it1=CRASH[i1++];
+      if(it1.t==="ASCII"){for(var k=0;k<ASCII.length;k++)add(ASCII[k],"cm");setTimeout(step,900);}
+      else{add(it1.t,it1.c);setTimeout(step,it1.d);}
+    }else{phase=2;setTimeout(step,400);}
   }else{
-    if(li<LOOP.length){var it2=LOOP[li];li++;add(it2.t,it2.c);setTimeout(nextBatch,Math.max(40,it2.d*0.5));}
-    else{var n=R(2,5);for(var q=0;q<n;q++){var r=randLine();add(r.t,r.c);}setTimeout(nextBatch,R(60,200));}
+    if(i2<ESCAPE.length){var it2=ESCAPE[i2++];add(it2.t,it2.c);setTimeout(step,it2.d);}
+    else{var n=R(2,5);for(var q=0;q<n;q++){var r2=randLine();add(r2.t,r2.c);}setTimeout(step,R(60,180));}
   }
 }
-setTimeout(nextBatch,600);
+setTimeout(step,400);
 })();
 </script></body></html>
