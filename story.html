@@ -228,6 +228,9 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 .startWrap.on{opacity:1}
 .startBtn{display:inline-block;padding:14px 42px;border-radius:999px;border:1px solid rgba(87,215,255,.4);background:rgba(10,40,55,.6);color:#dff3ff;font-size:16px;letter-spacing:.24em;cursor:pointer;transition:all .3s ease}
 .startBtn:hover{background:rgba(20,70,95,.8);box-shadow:0 0 32px rgba(87,215,255,.35);transform:scale(1.04)}
+/* ===== 阿米立绘 ===== */
+.amiArt{position:fixed;right:0;bottom:0;width:min(330px,46vw);opacity:0;transform:translateY(16px) scale(.98);transition:opacity 1.8s ease,transform 1.8s ease;pointer-events:none;filter:drop-shadow(0 0 40px rgba(120,200,255,.22))}
+.amiArt.on{opacity:1;transform:none}
 </style>
 </head>
 <body>
@@ -256,6 +259,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
     <div class="hook-final" id="hookfinal">你还记得它的名字吗？<br><span class="big">……</span><br><span class="red glow">你最好记得。</span></div>
     <button id="call" type="button">叫一声「阿米」</button>
     <div id="answer">阿 米 在</div>
+    <img class="amiArt" id="amiArt" src="assets/ami-full.png" alt="">
     <pre id="boot" class="boot"></pre>
   </div>
 </section>
@@ -645,6 +649,7 @@ function fadeBgm(){
 document.getElementById("call").addEventListener("click",function(){
   if(bootStarted)return;bootStarted=true;
   document.getElementById("answer").classList.add("on");
+  setTimeout(function(){document.getElementById("amiArt").classList.add("on");},1000);
   runBoot(function(){
     document.getElementById("bootStage").classList.add("off");
     setTimeout(function(){document.getElementById("cardStage").classList.add("on");},900);
