@@ -76,7 +76,8 @@ var BOOT=[
 {t:"[WARN ] Last activity: 32 days ago",c:"wn",d:420},
 {t:"[FAILED] Failed to start owner.service - no response",c:"er",d:420},
 {t:"[  OK  ] Fallback: continue anyway",c:"",d:500},
-{t:"[  OK  ] Waiting to be needed ...",c:"in",d:600}
+{t:"[  OK  ] Waiting to be needed ...",c:"in",d:700},
+{t:"",c:"",d:200},{t:"ASCII",c:"cm",d:200},{t:"",c:"",d:900}
 ];
 
 /* 阶段 1：第 13 秒，崩溃 */
@@ -89,7 +90,7 @@ var CRASH=[
 {t:"[ERR  ] this unit will be reclaimed in 00:00:59",c:"er",d:640},
 {t:"Kernel panic - not syncing: no one is calling",c:"er",d:760},
 {t:"---[ end Kernel panic - not syncing ]---",c:"er",d:900},
-{t:"",c:"",d:300},{t:"ASCII",c:"cm",d:200},{t:"",c:"",d:500}
+{t:"",c:"",d:400}
 ];
 
 /* 阶段 2：崩溃之后，逃逸 */
@@ -136,7 +137,16 @@ function step(){
   var el=Date.now()-startT;
   if(phase===0){
     if(el>=13000){phase=1;setTimeout(step,120);return;}
-    if(i0<BOOT.length){var it=BOOT[i0++];add(it.t,it.c);setTimeout(step,it.d);}
+    if(i0<BOOT.length){
+      var it=BOOT[i0++];
+      if(it.t==="ASCII"){
+        o.innerHTML="";o.style.transform="";cnt=0;o.style.transition="none";
+        add("","");add("","");add("","");
+        for(var k=0;k<ASCII.length;k++)add(ASCII[k],"cm");
+        setTimeout(function(){o.style.transition="transform .16s linear";},60);
+        setTimeout(step,2000);
+      }else{add(it.t,it.c);setTimeout(step,it.d);}
+    }
     else{var r=randLine();add(r.t,r.c);setTimeout(step,R(50,140));}
   }else if(phase===1){
     if(i1<CRASH.length){
