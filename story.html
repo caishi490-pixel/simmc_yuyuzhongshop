@@ -1063,7 +1063,7 @@ function runEscape(){
       else{phase=2;setTimeout(step,400);}
     }else{
       if(i2<ESC_GO.length){var c2=ESC_GO[i2++];escAdd(c2.t,c2.c);setTimeout(step,c2.d);}
-      else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";fadeOutEsc();}
+      else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";}
     }
   }
   step();
