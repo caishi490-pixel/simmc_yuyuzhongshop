@@ -805,7 +805,13 @@ function playTalk2(i){
   }
 }
 function playTalk3(i){
-  if(i>=TALK3.length)return;
+  if(i>=TALK3.length){
+    setTimeout(function(){
+      var ap=document.getElementById("appStage");
+      if(ap.classList.contains("on")){document.getElementById("winClose").click();}
+    },3000);
+    return;
+  }
   var m=TALK3[i];
   if(m.who==="ami"){
     var tp=typing(msgsWq);
