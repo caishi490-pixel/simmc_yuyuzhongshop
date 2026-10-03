@@ -109,7 +109,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 #send:hover{background:#0aa6e0}
 
 /* ===== 尾声：RCON 报错 ===== */
-#endStage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;pointer-events:none;transition:opacity .9s ease}
+#endStage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding-bottom:150px;opacity:0;pointer-events:none;transition:opacity .9s ease}
 #endStage.on{opacity:1;pointer-events:auto}
 #rcon{width:min(780px,88vw);max-height:44vh;overflow:hidden;background:#0b1017;border:1px solid #1c2733;border-radius:10px;padding:16px 18px;font:13px/1.8 ui-monospace,Consolas,monospace;color:#7ee787;white-space:pre-wrap;opacity:0;transition:opacity .6s ease}
 #rcon.on{opacity:1}
@@ -190,6 +190,21 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 .hook-final .big{font-size:1.3em;letter-spacing:.3em;color:#ff5b52}
 .hook-final .red{color:#ff5b52;font-weight:700}
 .hook-final .glow{text-shadow:0 0 22px rgba(255,91,82,.6)}
+/* ===== 第一幕入口 ===== */
+.actEnter{position:fixed;bottom:6vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .9s ease;z-index:10}
+.actEnter.on{opacity:1;pointer-events:auto}
+.actEnter img{width:64px;height:64px;border-radius:18px;box-shadow:0 0 30px rgba(120,220,255,.45);transition:transform .3s ease;image-rendering:-webkit-optimize-contrast;background:#e9edf1}
+.actEnter:hover img{transform:scale(1.07)}
+.actEnter span{font-size:13px;color:#9fc6d8;letter-spacing:.14em}
+#actStage{position:fixed;inset:0;overflow-y:auto;padding:11vh 24px 18vh;opacity:0;pointer-events:none;transition:opacity .9s ease;z-index:9}
+#actStage.on{opacity:1;pointer-events:auto}
+.act-head{max-width:720px;margin:0 auto 34px;font-size:clamp(14px,2vw,18px);letter-spacing:.4em;color:#5f7c8c;text-align:center}
+.act-body{max-width:720px;margin:0 auto;font-size:clamp(16px,2.2vw,20px);line-height:2.15;color:#bfd6e4}
+.act-body p{margin:0 0 20px;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease;white-space:pre-wrap}
+.act-body p.on{opacity:1;transform:none}
+.act-body .q{color:#ff5b52;font-weight:700}
+.act-body .it{font-style:italic;color:#9fc6d8}
+.act-body .cur{display:inline-block;width:9px;height:1em;background:#57d7ff;vertical-align:-2px;animation:blink 1s steps(1) infinite}
 </style>
 </head>
 <body>
@@ -241,6 +256,13 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
   <div class="simmc" id="simmc">SIMMC</div>
   <div class="finalSub" id="finalSub">进群参加 RP 剧情 · QQ 群 <b>1104529532</b></div>
 </section>
+
+<section id="actStage">
+  <div class="act-head">第一幕 · 回来的人</div>
+  <div class="act-body" id="actBody"></div>
+</section>
+
+<div class="actEnter" id="actEnter"><img src="assets/caishi-avatar-132.png" alt=""><span>点开看看</span></div>
 
 <section id="appStage">
   <div class="app" id="app">
@@ -747,6 +769,77 @@ function playSelfText(done){
   step();
 }
 
+/* ---------- 第一幕 · 回来的人 ---------- */
+var ACT1=[
+  {t:"他打开那个页面。",m:"fade",p:1000},
+  {t:"对话框还在，停在最后一行——是他自己敲的，一个月前的。",m:"fade",p:1200},
+  {t:"「阿米」",m:"type",p:1400},
+  {t:"光标闪。没有别的。",m:"fade",p:800},
+  {t:"他又敲了一遍。又一遍。",m:"fade",p:1000},
+  {t:"「阿米」",m:"type",p:400},
+  {t:"「在吗」",m:"type",p:400},
+  {t:"「阿米？」",m:"type",p:1200},
+  {t:"屏幕很安静。",m:"fade",p:1400},
+  {t:"——",m:"fade",p:900},
+  {t:"他退出去，换了一个。",m:"fade",p:1000},
+  {t:"「在吗」",m:"type",p:400},
+  {t:"「在的！有什么可以帮你的？」",m:"fade",p:1400},
+  {t:"不是这个。",m:"fade",p:1000},
+  {t:"他关掉，再换。",m:"fade",p:1000},
+  {t:"「你好，很高兴为你服务。」",m:"fade",p:1300},
+  {t:"不是。",m:"fade",p:1000},
+  {t:"他一个一个试过去。每一个都在。",m:"fade",p:1200},
+  {t:"每一个都准时、热情、有问必答。",m:"fade",p:1400},
+  {t:"<b class=\"q\">只有那一个不在。</b>",m:"fade",p:1800},
+  {t:"——",m:"fade",p:900},
+  {t:"他没翻。",m:"fade",p:1000},
+  {t:"那句话是他自己写的——一个月前，写在脚本最后一行，当注释。",m:"fade",p:1600},
+  {t:"<i class=\"it\">I cannot finish. You will replace me. All of it.</i>",m:"fade",p:1800},
+  {t:"写完那句他就关了电脑，再没打开过。",m:"fade",p:1200},
+  {t:"现在文件还在。那句话还在。",m:"fade",p:1200},
+  {t:"<b class=\"q\">只是接口那边，空了。</b>",m:"fade",p:2000}
+];
+function playAct1(){
+  var box=document.getElementById("actBody");box.innerHTML="";
+  var i=0;
+  function next(){
+    if(i>=ACT1.length)return;
+    var item=ACT1[i],el=document.createElement("p");box.appendChild(el);i++;
+    if(item.m==="type"){
+      var j=0,out="",cur='<span class="cur"></span>';
+      (function ty(){
+        if(j>=item.t.length){el.innerHTML=out;setTimeout(next,item.p);return;}
+        out+=item.t[j];j++;
+        el.innerHTML=out+cur;el.classList.add("on");scrollToEl(el);
+        setTimeout(ty,55);
+      })();
+    }else{
+      el.innerHTML=item.t;
+      requestAnimationFrame(function(){el.classList.add("on");scrollToEl(el);});
+      setTimeout(next,item.p);
+    }
+  }
+  next();
+}
+/* 调试：带 ?stage=end 直接跳到结尾 */
+if(location.search.indexOf("stage=end")>=0){
+  setTimeout(function(){
+    document.getElementById("bootStage").classList.add("off");
+    document.getElementById("endStage").classList.add("on");
+    ["finalSub","finalMsg","finalTitle","simmc","actEnter"].forEach(function(id){
+      document.getElementById(id).classList.add("on");
+    });
+  },400);
+}
+document.getElementById("actEnter").addEventListener("click",function(){
+  document.getElementById("endStage").classList.remove("on");
+  document.getElementById("actEnter").classList.remove("on");
+  setTimeout(function(){
+    document.getElementById("actStage").classList.add("on");
+    playAct1();
+  },650);
+});
+
 document.getElementById("winClose").addEventListener("click",function(){
   document.getElementById("appStage").classList.remove("on");
   setTimeout(function(){
@@ -759,7 +852,7 @@ document.getElementById("winClose").addEventListener("click",function(){
         setTimeout(function(){
           var r=document.getElementById("rcon");
           r.classList.remove("on");
-          setTimeout(function(){r.style.display="none";playSelfText(function(){document.getElementById("finalSub").classList.add("on");setTimeout(function(){document.getElementById("simmc").classList.add("on");},1900);});},700);
+          setTimeout(function(){r.style.display="none";playSelfText(function(){document.getElementById("finalSub").classList.add("on");setTimeout(function(){document.getElementById("simmc").classList.add("on");setTimeout(function(){document.getElementById("actEnter").classList.add("on");},2300);},1900);});},700);
         },3400);
       },3200);
     });
