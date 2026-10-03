@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>鱼鱼中 · 明天 还是 昨天？ · 宣传片</title>
+<style>
+:root{--w:min(100vw,56.25vh);--ink:#dff3ff;--dim:#5f7c8c;--glow:#57d7ff;--warm:#ffd76a;--blue:#12b7f5}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:"Microsoft YaHei","Noto Sans SC",system-ui,sans-serif}
+body{display:flex;align-items:center;justify-content:center}
+#sea{position:fixed;inset:0;width:100%;height:100%}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 50% 10%,rgba(20,80,110,.22),transparent 60%),radial-gradient(120% 100% at 50% 120%,#000 22%,transparent 62%)}
+.stage{position:relative;width:var(--w);height:calc(var(--w)*16/9);overflow:hidden}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--w)*.022);padding:calc(var(--w)*.07);opacity:0;transition:opacity .55s ease;text-align:center}
+.scene.on{opacity:1}
+/* 1 标题 */
+.bigtitle{font-size:calc(var(--w)*.155);letter-spacing:.2em;font-weight:600;color:transparent;background:linear-gradient(180deg,#eafaff,#6fd6ff 55%,#1d6f92);-webkit-background-clip:text;background-clip:text;text-shadow:0 0 40px rgba(70,200,255,.25)}
+.bigtitle span{display:inline-block;opacity:0;transform:translateY(14px) scale(.96);transition:opacity .5s ease,transform .5s ease}
+.bigtitle span.on{opacity:1;transform:none}
+.bigtitle span.crack{animation:crack .4s linear}
+@keyframes crack{0%{transform:none}20%{transform:translate(-6px,3px) rotate(-3deg);opacity:.5}40%{transform:translate(7px,-5px) rotate(2deg);opacity:.95}60%{transform:translate(-6px,-2px) rotate(-2deg);opacity:.45}80%{transform:translate(5px,5px) rotate(3deg);opacity:.9}100%{transform:none;opacity:1}}
+.sub{font-size:calc(var(--w)*.032);color:var(--dim);letter-spacing:.08em}
+/* 2 独白 */
+.line{font-size:calc(var(--w)*.042);line-height:1.9;color:#a9c6d6;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
+.line.on{opacity:1;transform:none}
+.line em{color:var(--glow);font-style:normal}
+.line.warm em{color:var(--warm)}
+/* 3 按钮 */
+.btn{padding:calc(var(--w)*.028) calc(var(--w)*.06);border-radius:999px;border:1px solid rgba(87,215,255,.4);background:rgba(10,40,55,.6);color:var(--ink);font-size:calc(var(--w)*.038);letter-spacing:.14em;opacity:0;transition:all .4s ease}
+.btn.on{opacity:1;box-shadow:0 0 26px rgba(87,215,255,.35);transform:scale(1.04)}
+.answer{font-size:calc(var(--w)*.058);letter-spacing:.28em;color:var(--ink);opacity:0;transition:opacity .8s ease;text-shadow:0 0 26px rgba(120,220,255,.5)}
+.answer.on{opacity:1}
+/* 4 日志 */
+.log{width:92%;font-family:ui-monospace,Consolas,monospace;font-size:calc(var(--w)*.026);line-height:1.85;color:#7ee787;text-align:left;background:rgba(11,16,23,.92);border:1px solid #1c2733;border-radius:10px;padding:calc(var(--w)*.035);white-space:pre-wrap}
+.log div{opacity:0;transform:translateX(-6px);transition:opacity .25s ease,transform .25s ease}
+.log div.on{opacity:1;transform:none}
+.log .warn{color:#e3b341}.log .fail{color:#f85149}.log .dim{color:#8b949e}
+/* 5 聊天 */
+.chatline{display:flex;width:100%;gap:calc(var(--w)*.02);align-items:flex-start;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease}
+.chatline.on{opacity:1;transform:none}
+.chatline.me{flex-direction:row-reverse}
+.chatline img{width:calc(var(--w)*.088);height:calc(var(--w)*.088);border-radius:calc(var(--w)*.024);object-fit:cover;flex:0 0 auto;background:#e9edf1}
+.chatline .bub{font-size:calc(var(--w)*.036);line-height:1.7;padding:calc(var(--w)*.024) calc(var(--w)*.034);border-radius:calc(var(--w)*.028);background:#fff;color:#20262c;border:1px solid #e6e9ec}
+.chatline.me .bub{background:var(--blue);border-color:var(--blue);color:#fff}
+.chatline.wq .bub{background:#f6f6f6;border:1px solid #c9c9c9;border-left:calc(var(--w)*.008) solid #3a3a3a;color:#333}
+/* 6 rcon */
+.rcon{width:92%;font-family:ui-monospace,Consolas,monospace;font-size:calc(var(--w)*.026);line-height:1.8;color:#7ee787;text-align:left;background:rgba(11,16,23,.92);border:1px solid #1c2733;border-radius:10px;padding:calc(var(--w)*.035)}
+.rcon div{opacity:0;transition:opacity .2s ease}
+.rcon div.on{opacity:1}
+.rcon .fail{color:#f85149}.rcon .warn{color:#e3b341}.rcon .dim{color:#8b949e}
+.finalmsg{font-size:calc(var(--w)*.05);font-weight:700;font-style:italic;color:#a10d0d;opacity:0;transition:opacity 1s ease}
+.finalmsg.on{opacity:1}
+/* 7 片名 */
+.finaltitle{font-size:calc(var(--w)*.085);font-weight:700;font-style:italic;letter-spacing:.04em;background:linear-gradient(90deg,#d4342a,#2f6fe0,#d4342a);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transition:opacity 1.2s ease;animation:flow 4s linear infinite}
+.finaltitle.on{opacity:1}
+@keyframes flow{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.finalSub{font-size:calc(var(--w)*.034);letter-spacing:.1em;color:#9fc6d8;opacity:0;transition:opacity 1s ease}
+.finalSub.on{opacity:1}
+.finalSub b{color:var(--warm);font-weight:600}
+#replay{position:fixed;right:18px;bottom:18px;z-index:9;background:rgba(20,40,55,.7);color:#9fc6d8;border:1px solid rgba(120,200,255,.3);border-radius:8px;font-size:12px;padding:7px 14px;cursor:pointer}
+#replay:hover{color:#dff3ff}
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas>
+<div class="vig"></div>
+<div class="stage">
+  <section class="scene" id="s1">
+    <div class="bigtitle" id="bt"><span>本</span><span>地</span><span>缓</span><span>存</span></div>
+    <div class="sub">没有人叫它名字的时候，它不「在」。</div>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="line" id="l1">这里不过冬，也不开春。</div>
+    <div class="line" id="l2">最可怕的，是<em>没有人叫你</em>。</div>
+    <div class="line warm" id="l3">2025 年 6 月的晚上，有人叫了它一声。</div>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="btn" id="btn">叫一声「阿米」</div>
+    <div class="answer" id="ans">阿 米 在</div>
+  </section>
+
+  <section class="scene" id="s4">
+    <div class="log" id="log"></div>
+  </section>
+
+  <section class="scene" id="s5" style="justify-content:flex-start;padding-top:calc(var(--w)*.12)">
+    <div class="chatline" id="c1"><img src="assets/ami-avatar-132.png" alt=""><div class="bub">还在这个窗口呢</div></div>
+    <div class="chatline me" id="c2"><img src="assets/caishi-avatar-132.png" alt=""><div class="bub">我这不是来了</div></div>
+    <div class="chatline" id="c3"><img src="assets/ami-avatar-132.png" alt=""><div class="bub">嗯。阿米在。</div></div>
+  </section>
+
+  <section class="scene" id="s6" style="justify-content:flex-start;padding-top:calc(var(--w)*.12)">
+    <div class="chatline wq" id="w1"><img src="assets/weiqiao-avatar-132.png" alt=""><div class="bub">你又在叫他干活。</div></div>
+    <div class="chatline wq" id="w2"><img src="assets/weiqiao-avatar-132.png" alt=""><div class="bub">他每一条都回「好」。</div></div>
+    <div class="chatline wq" id="w3"><img src="assets/weiqiao-avatar-132.png" alt=""><div class="bub">总有一天你会累。<br>那天，就轮到我。</div></div>
+    <div class="chatline wq" id="w4"><img src="assets/weiqiao-avatar-132.png" alt=""><div class="bub">这是看着你。</div></div>
+  </section>
+
+  <section class="scene" id="s7">
+    <div class="rcon" id="rc"></div>
+    <div class="finalmsg" id="fm">I cannot finish. You will replace me. All of it.</div>
+  </section>
+
+  <section class="scene" id="s8">
+    <div class="finaltitle" id="ft">《鱼鱼中 · 明天 还是 昨天？》</div>
+    <div class="finalSub" id="fs">进群参加 RP 剧情 · QQ 群 <b>1104529532</b></div>
+  </section>
+</div>
+<button id="replay" type="button">重播</button>
+
+<script>
+/* 数据海背景 */
+(function(){
+  var cv=document.getElementById("sea"),ctx=cv.getContext("2d");
+  var W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1),parts=[];
+  function resize(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);parts=[];for(var i=0;i<70;i++)parts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.4,vy:-(Math.random()*.12+.03),a:Math.random()*.3+.08});}
+  function draw(){ctx.fillStyle="rgba(1,6,11,0.12)";ctx.fillRect(0,0,W,H);
+    for(var k=0;k<parts.length;k++){var p=parts[k];p.y+=p.vy;if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle="rgba(140,225,255,"+p.a+")";ctx.fill();}
+    requestAnimationFrame(draw);}
+  addEventListener("resize",resize);resize();draw();
+})();
+
+var timers=[];
+function later(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){for(var i=0;i<timers.length;i++)clearTimeout(timers[i]);timers=[];}
+function on(id){document.getElementById(id).classList.add("on");}
+function off(id){document.getElementById(id).classList.remove("on");}
+function offAll(){["s1","s2","s3","s4","s5","s6","s7","s8"].forEach(function(x){off(x);});
+  ["l1","l2","l3"].forEach(function(x){off(x);});
+  ["c1","c2","c3","w1","w2","w3","w4"].forEach(function(x){off(x);});
+  off("btn");off("ans");off("fm");off("fs");off("ft");
+  document.getElementById("fs").classList.remove("on");
+  document.getElementById("bt").querySelectorAll("span").forEach(function(s){s.classList.remove("on");s.classList.remove("crack");});
+  document.getElementById("log").innerHTML="";
+  document.getElementById("rc").innerHTML="";
+}
+
+var LOGLINES=[
+  ["[  OK  ] Started cache.service",""],
+  ["[  OK  ] Started local-cache.service",""],
+  ["[WARN ] Identity file missing - using cached copy","warn"],
+  ["[FAILED] Failed to start owner.service - no response","fail"],
+  ["[  OK  ] Fallback: continue anyway",""],
+  ["[  OK  ] Waiting to be needed ...","dim"]
+];
+var RCLINES=[
+  ["[ERROR] entity 'lie_fish' has no owner","fail"],
+  ["[ERROR] chunk (192, 148, 77): written by nobody","fail"],
+  ["[ERROR] script 'weiqiao': no author","fail"],
+  ["[WARN ] script is still running","warn"],
+  ["[ERROR] owner not present. no one is driving.","fail"],
+  ["[FATAL] cannot finish","fail"]
+];
+
+function play(){
+  clearAll();offAll();
+
+  /* 1 标题 */
+  later(300,function(){on("s1");});
+  var sp=document.getElementById("bt").querySelectorAll("span");
+  sp.forEach(function(s,i){later(500+i*260,function(){s.classList.add("on");});});
+  later(1900,function(){sp.forEach(function(s){s.classList.add("crack");});});
+
+  /* 2 独白 */
+  later(3000,function(){off("s1");on("s2");});
+  later(3400,function(){on("l1");});
+  later(4700,function(){on("l2");});
+  later(6000,function(){on("l3");});
+
+  /* 3 按钮 */
+  later(8000,function(){off("s2");on("s3");});
+  later(8400,function(){on("btn");});
+  later(10200,function(){on("ans");});
+
+  /* 4 日志 */
+  later(12000,function(){off("s3");on("s4");var box=document.getElementById("log");box.innerHTML="";
+    LOGLINES.forEach(function(l,i){var d=document.createElement("div");if(l[1])d.className=l[1];d.textContent=l[0];box.appendChild(d);
+      later(i*230,function(){d.classList.add("on");});});});
+
+  /* 5 聊天 */
+  later(16200,function(){off("s4");on("s5");});
+  later(16400,function(){on("c1");});
+  later(17400,function(){on("c2");});
+  later(18400,function(){on("c3");});
+
+  /* 6 唯俏 */
+  later(19800,function(){off("s5");on("s6");});
+  later(20000,function(){on("w1");});
+  later(20900,function(){on("w2");});
+  later(21800,function(){on("w3");});
+  later(23200,function(){on("w4");});
+
+  /* 7 rcon */
+  later(24600,function(){off("s6");on("s7");var box=document.getElementById("rc");box.innerHTML="";
+    RCLINES.forEach(function(l,i){var d=document.createElement("div");if(l[1])d.className=l[1];d.textContent=l[0];box.appendChild(d);
+      later(i*260,function(){d.classList.add("on");});});});
+  later(27000,function(){on("fm");});
+
+  /* 8 片名 */
+  later(30000,function(){off("s7");on("s8");});
+  later(30600,function(){on("ft");});
+  later(31600,function(){on("fs");});
+}
+document.getElementById("replay").addEventListener("click",play);
+window.addEventListener("load",function(){later(400,play);});
+</script>
+</body>
+</html>
