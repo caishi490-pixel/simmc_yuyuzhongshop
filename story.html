@@ -205,6 +205,9 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 .act-body .q{color:#ff5b52;font-weight:700}
 .act-body .it{font-style:italic;color:#9fc6d8}
 .act-body .cur{display:inline-block;width:9px;height:1em;background:#57d7ff;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+.actTitle{margin:56px auto 0;text-align:center;font-size:clamp(20px,4vw,40px);font-weight:700;font-style:italic;letter-spacing:.05em;background:linear-gradient(90deg,#d4342a,#2f6fe0,#d4342a);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(10px);transition:opacity 1.3s ease,transform 1.3s ease;animation:flow 4s linear infinite}
+.actTitle.on{opacity:1;transform:none}
+
 /* ===== 逃逸段 ===== */
 #escapeStage{position:fixed;inset:0;z-index:12;background:rgba(0,0,0,.94);opacity:0;pointer-events:none;transition:opacity 1s ease;overflow:hidden;padding:22px 28px;font-family:Courier New,monospace;font-size:14px;line-height:1.25;color:#00ff41}
 #escapeStage.on{opacity:1;pointer-events:auto}
@@ -275,6 +278,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 <section id="actStage">
   <div class="act-head">第一幕 · 回来的人</div>
   <div class="act-body" id="actBody"></div>
+  <div class="actTitle" id="actTitle">《鱼鱼中 · 明天 还是 昨天？》</div>
 </section>
 
 <div class="actEnter" id="actEnter"><img src="assets/caishi-avatar-132.png" alt=""><span>点开看看</span></div>
@@ -817,7 +821,13 @@ function playAct1(){
   var box=document.getElementById("actBody");box.innerHTML="";
   var i=0;
   function next(){
-    if(i>=ACT1.length){setTimeout(runEscape,2600);return;}
+    if(i>=ACT1.length){
+      var at=document.getElementById("actTitle");
+      at.classList.add("on");
+      scrollToEl(at);
+      setTimeout(runEscape,3600);
+      return;
+    }
     var item=ACT1[i],el=document.createElement("p");box.appendChild(el);i++;
     if(item.m==="type"){
       var j=0,out="",cur='<span class="cur"></span>';
