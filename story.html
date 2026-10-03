@@ -227,6 +227,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 </head>
 <body>
 <canvas id="sea"></canvas>
+<audio id="bgm" src="audio/bgm.mp3" loop preload="none"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
 
@@ -598,6 +599,19 @@ function runBoot(done){
 }
 
 /* ---------- 2 按钮 ---------- */
+var bgm=document.getElementById("bgm");
+document.getElementById("call").addEventListener("click",function(){
+  try{bgm.volume=0.42;bgm.play().catch(function(){});}catch(e){}
+}, {once:true});
+function fadeBgm(){
+  try{
+    var v=bgm.volume,t=setInterval(function(){
+      v-=0.025;
+      if(v<=0){bgm.pause();clearInterval(t);return;}
+      bgm.volume=v;
+    },90);
+  }catch(e){}
+}
 document.getElementById("call").addEventListener("click",function(){
   if(bootStarted)return;bootStarted=true;
   document.getElementById("answer").classList.add("on");
@@ -945,6 +959,7 @@ function escAdd(t,c){var box=document.getElementById("escOut"),st=document.getEl
 var d=document.createElement("div");d.className=(c||"");d.textContent=t;box.appendChild(d);
 var over=box.scrollHeight-st.clientHeight+40;if(over>0)box.style.transform="translateY(-"+over+"px)";}
 function runEscape(){
+  fadeBgm();
   var stage=document.getElementById("escapeStage"),box=document.getElementById("escOut");
   stage.style.opacity="";stage.classList.add("on");
   box.innerHTML="";box.style.transform="";
