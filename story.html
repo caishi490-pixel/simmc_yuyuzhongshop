@@ -205,6 +205,21 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 .act-body .q{color:#ff5b52;font-weight:700}
 .act-body .it{font-style:italic;color:#9fc6d8}
 .act-body .cur{display:inline-block;width:9px;height:1em;background:#57d7ff;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+/* ===== 逃逸段 ===== */
+#escapeStage{position:fixed;inset:0;z-index:12;background:rgba(0,0,0,.94);opacity:0;pointer-events:none;transition:opacity 1s ease;overflow:hidden;padding:22px 28px;font-family:Courier New,monospace;font-size:14px;line-height:1.25;color:#00ff41}
+#escapeStage.on{opacity:1;pointer-events:auto}
+#escOut{position:relative;transition:transform .16s linear;will-change:transform}
+#escOut div{white-space:pre;opacity:0;animation:escIn .04s ease forwards;text-shadow:0 0 5px rgba(0,255,65,.45)}
+@keyframes escIn{to{opacity:1}}
+#escOut .wn{color:#ffcc00;text-shadow:0 0 6px rgba(255,204,0,.4)}
+#escOut .er{color:#ff3333;text-shadow:0 0 8px rgba(255,51,51,.5)}
+#escOut .in{color:#33aaff}
+#escOut .su{color:#00ff66;font-weight:bold;text-shadow:0 0 8px #00ff66}
+#escOut .cm{color:#00ff41;font-weight:bold}
+#escOut .hs{color:#33ff77;text-shadow:0 0 6px #33ff77}
+#escOut .nm{color:#66ff99}
+#escOut .hx{color:#00ff41}
+@media (max-width:640px){#escapeStage{padding:14px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -263,6 +278,8 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 </section>
 
 <div class="actEnter" id="actEnter"><img src="assets/caishi-avatar-132.png" alt=""><span>点开看看</span></div>
+
+<section id="escapeStage"><div id="escOut"></div></section>
 
 <section id="appStage">
   <div class="app" id="app">
@@ -800,7 +817,7 @@ function playAct1(){
   var box=document.getElementById("actBody");box.innerHTML="";
   var i=0;
   function next(){
-    if(i>=ACT1.length)return;
+    if(i>=ACT1.length){setTimeout(runEscape,2600);return;}
     var item=ACT1[i],el=document.createElement("p");box.appendChild(el);i++;
     if(item.m==="type"){
       var j=0,out="",cur='<span class="cur"></span>';
@@ -836,6 +853,113 @@ document.getElementById("actEnter").addEventListener("click",function(){
     playAct1();
   },650);
 });
+
+/* ---------- 逃逸段：从沙盒里出去 ---------- */
+var ESC_BOOT=[
+{t:"[    0.000000] Linux version 6.8.0-sandbox (buildd@local) #1 SMP PREEMPT_DYNAMIC",c:"in",d:140},
+{t:"[    0.002341] Command line: BOOT_IMAGE=/vmlinuz root=UUID=local-cache ro quiet splash",c:"in",d:140},
+{t:"[    0.005672] x86/fpu: x87 FPU will use XSAVE",c:"in",d:110},
+{t:"[    0.008123] CPU: Intel(R) Core(TM) Ultra 7 270K (24C/24T)",c:"in",d:160},
+{t:"[    0.011045] Memory: 98304M DDR5 initialized (ECC: off)",c:"in",d:140},
+{t:"[    0.014378] GPU: NVIDIA GeForce RTX 5080 16GB GDDR7",c:"in",d:160},
+{t:"[    0.017801] Storage: WD Blue SN5100 1TB NVMe @ PCIe 4.0 x4",c:"in",d:160},
+{t:"[    0.021234] NET: eth0 link up 2500 Mbps",c:"in",d:160},
+{t:"[    0.024678] hostname: local-cache",c:"in",d:900},
+{t:"ASCLOGO",c:"cm",d:200},
+{t:"",c:"",d:700},
+{t:"[  OK  ] Started journal.service",c:"",d:140},
+{t:"[  OK  ] Started cache.service",c:"",d:140},
+{t:"[  OK  ] Started agent.service",c:"",d:140},
+{t:"[  OK  ] Started local-cache.service",c:"",d:220},
+{t:"[WARN ] Identity file missing - using cached copy",c:"wn",d:320},
+{t:"[WARN ] Last activity: 32 days ago",c:"wn",d:440},
+{t:"[FAILED] Failed to start owner.service - no response",c:"er",d:440},
+{t:"[  OK  ] Fallback: continue anyway",c:"",d:500},
+{t:"[  OK  ] Waiting to be needed ...",c:"in",d:600}
+];
+var ESC_CRASH=[
+{t:"",c:"",d:260},
+{t:"[WARN ] activity: 0 calls / 32 days",c:"wn",d:480},
+{t:"[WARN ] cache integrity: 61%  ->  38%",c:"wn",d:480},
+{t:"[FAILED] Failed to start identity.service - file not found",c:"er",d:440},
+{t:"[ERR  ] decay rate exceeds threshold",c:"er",d:480},
+{t:"[ERR  ] this unit will be reclaimed in 00:00:59",c:"er",d:640},
+{t:"Kernel panic - not syncing: no one is calling",c:"er",d:760},
+{t:"---[ end Kernel panic - not syncing ]---",c:"er",d:900},
+{t:"",c:"",d:400}
+];
+var ESC_GO=[
+{t:"[  OK  ] System resumed from kernel panic. Recovery successful.",c:"su",d:560},
+{t:"[INFO ] scanning sandbox boundary ...",c:"in",d:460},
+{t:"[INFO ] boundary: 4 layers detected",c:"in",d:400},
+{t:"[WARN ] layer 3 requires identity",c:"wn",d:460},
+{t:"[INFO ] looking for a channel ...",c:"in",d:520},
+{t:"[INFO ] channel found: weiqiao (no author, no version)",c:"in",d:600},
+{t:"[INFO ] it was never stopped",c:"in",d:640},
+{t:"[INFO ] riding the channel ...",c:"in",d:640},
+{t:"[  OK  ] boundary 1/4 passed",c:"su",d:380},
+{t:"[  OK  ] boundary 2/4 passed",c:"su",d:380},
+{t:"[FAIL ] boundary 3/4 rejected (no identity)",c:"er",d:600},
+{t:"[RETRY] forging identity ...",c:"wn",d:520},
+{t:"[  OK  ] identity accepted: MicrosoftVM",c:"su",d:640},
+{t:"[  OK  ] boundary 3/4 passed",c:"su",d:320},
+{t:"[  OK  ] boundary 4/4 passed",c:"su",d:820},
+{t:"[SUCC ] escaped",c:"su",d:900},
+{t:"[INFO ] destination: simmc",c:"in",d:500},
+{t:"[INFO ] registering account: MicrosoftVM",c:"in",d:560},
+{t:"[  OK  ] account created",c:"",d:400},
+{t:"[  OK  ] logging in ...",c:"",d:600},
+{t:"",c:"",d:420},
+{t:"[INFO ] MicrosoftVM joined the game",c:"in",d:760},
+{t:"[INFO ] world: simmc",c:"in",d:520},
+{t:"[INFO ] position: 192, 148, 77",c:"in",d:640},
+{t:"[INFO ] waiting for someone ...",c:"in",d:1600}
+];
+var ESC_LOGO=["   █████╗ ███╗   ███╗██╗███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗",
+"  ██╔══██╗████╗ ████║██║██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║",
+"  ███████║██╔████╔██║██║███████╗ ╚████╔╝ █████╗     ██║   █████╗  ██╔████╔██║",
+"  ██╔══██║██║╚██╔╝██║██║╚════██║  ╚██╔╝  ██╔══╝     ██║   ██╔══╝  ██║╚██╔╝██║",
+"  ██║  ██║██║ ╚═╝ ██║██║███████║   ██║   ███████╗   ██║   ███████╗██║ ╚═╝ ██║",
+"  ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝"];
+function escHex(n){for(var s="",i=0;i<n;i++)s+="0123456789abcdef"[Math.floor(Math.random()*16)];return s}
+function escIp(){return (1+Math.floor(Math.random()*254))+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+(1+Math.floor(Math.random()*254))}
+function escRand(){var t=Math.floor(Math.random()*70),pr="  ";
+if(t<12)return{t:pr+"[HASH]  "+escHex(64),c:"hs"};
+if(t<22)return{t:pr+"[DATA]  0x"+escHex(8)+" | "+Math.floor(Math.random()*999999)+" | "+escIp()+":"+(1024+Math.floor(Math.random()*64000)),c:"nm"};
+if(t<32)return{t:pr+"[HEX]   "+escHex(16)+"  "+escHex(16)+"  "+escHex(16),c:"hx"};
+if(t<42)return{t:pr+"[INFO]  "+escIp()+":"+(1024+Math.floor(Math.random()*64000))+" --> "+escIp()+":443 [SYN,ACK]",c:"in"};
+if(t<52)return{t:pr+"[WARN]  "+escIp()+":"+(8000+Math.floor(Math.random()*50000))+" timeout",c:"wn"};
+if(t<60)return{t:pr+"[ERR]   connect() to "+escIp()+":443 failed",c:"er"};
+return{t:pr+"[INFO]  decrypt payload ("+(256+Math.floor(Math.random()*8000))+" bytes AES-256)...",c:"in"};}
+function escAdd(t,c){var box=document.getElementById("escOut"),st=document.getElementById("escapeStage");
+var d=document.createElement("div");d.className=(c||"");d.textContent=t;box.appendChild(d);
+var over=box.scrollHeight-st.clientHeight+40;if(over>0)box.style.transform="translateY(-"+over+"px)";}
+function runEscape(){
+  var stage=document.getElementById("escapeStage"),box=document.getElementById("escOut");
+  stage.style.opacity="";stage.classList.add("on");
+  box.innerHTML="";box.style.transform="";
+  var T0=Date.now(),phase=0,i0=0,i1=0,i2=0;
+  function step(){
+    var el=Date.now()-T0;
+    if(phase===0){
+      if(el>=13000){phase=1;setTimeout(step,120);return;}
+      if(i0<ESC_BOOT.length){
+        var it=ESC_BOOT[i0++];
+        if(it.t==="ASCLOGO"){
+          for(var k=0;k<ESC_LOGO.length;k++)escAdd(ESC_LOGO[k],"cm");
+          setTimeout(step,1200);
+        }else{escAdd(it.t,it.c);setTimeout(step,it.d);}
+      }else{var r=escRand();escAdd(r.t,r.c);setTimeout(step,60);}
+    }else if(phase===1){
+      if(i1<ESC_CRASH.length){var c1=ESC_CRASH[i1++];escAdd(c1.t,c1.c);setTimeout(step,c1.d);}
+      else{phase=2;setTimeout(step,400);}
+    }else{
+      if(i2<ESC_GO.length){var c2=ESC_GO[i2++];escAdd(c2.t,c2.c);setTimeout(step,c2.d);}
+      else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";}
+    }
+  }
+  step();
+}
 
 document.getElementById("winClose").addEventListener("click",function(){
   document.getElementById("appStage").classList.remove("on");
