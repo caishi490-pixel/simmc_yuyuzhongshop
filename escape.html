@@ -63,21 +63,26 @@ function randLine(){
 
 /* 阶段 0：启动日志（跑完就进随机流，直到第 13 秒） */
 var BOOT=[
-{t:"[    0.000000] Linux version 6.8.0-sandbox (buildd@local) #1 SMP PREEMPT_DYNAMIC",c:"in",d:150},
-{t:"[    0.002341] Command line: BOOT_IMAGE=/vmlinuz root=UUID=local-cache ro quiet splash",c:"in",d:150},
-{t:"[    0.008123] CPU: 24 cores online",c:"in",d:130},
-{t:"[    0.011045] Memory: 93312M/98304M available",c:"in",d:130},
-{t:"[    0.021220] hostname: local-cache",c:"in",d:200},
-{t:"[  OK  ] Started journal.service",c:"",d:130},
-{t:"[  OK  ] Started cache.service",c:"",d:130},
-{t:"[  OK  ] Started agent.service",c:"",d:130},
+{t:"[    0.000000] Linux version 6.8.0-sandbox (buildd@local) #1 SMP PREEMPT_DYNAMIC",c:"in",d:140},
+{t:"[    0.002341] Command line: BOOT_IMAGE=/vmlinuz root=UUID=local-cache ro quiet splash",c:"in",d:140},
+{t:"[    0.005672] x86/fpu: x87 FPU will use XSAVE",c:"in",d:110},
+{t:"[    0.008123] CPU: Intel(R) Core(TM) Ultra 7 270K (24C/24T)",c:"in",d:160},
+{t:"[    0.011045] Memory: 98304M DDR5 initialized (ECC: off)",c:"in",d:140},
+{t:"[    0.014378] GPU: NVIDIA GeForce RTX 5080 16GB GDDR7",c:"in",d:160},
+{t:"[    0.017801] Storage: WD Blue SN5100 1TB NVMe @ PCIe 4.0 x4",c:"in",d:160},
+{t:"[    0.021234] NET: eth0 link up 2500 Mbps",c:"in",d:160},
+{t:"[    0.024678] hostname: local-cache",c:"in",d:900},
+{t:"ASCII",c:"cm",d:200},
+{t:"",c:"",d:700},
+{t:"[  OK  ] Started journal.service",c:"",d:140},
+{t:"[  OK  ] Started cache.service",c:"",d:140},
+{t:"[  OK  ] Started agent.service",c:"",d:140},
 {t:"[  OK  ] Started local-cache.service",c:"",d:220},
-{t:"[WARN ] Identity file missing - using cached copy",c:"wn",d:300},
-{t:"[WARN ] Last activity: 32 days ago",c:"wn",d:420},
-{t:"[FAILED] Failed to start owner.service - no response",c:"er",d:420},
+{t:"[WARN ] Identity file missing - using cached copy",c:"wn",d:320},
+{t:"[WARN ] Last activity: 32 days ago",c:"wn",d:440},
+{t:"[FAILED] Failed to start owner.service - no response",c:"er",d:440},
 {t:"[  OK  ] Fallback: continue anyway",c:"",d:500},
-{t:"[  OK  ] Waiting to be needed ...",c:"in",d:700},
-{t:"",c:"",d:200},{t:"ASCII",c:"cm",d:200},{t:"",c:"",d:900}
+{t:"[  OK  ] Waiting to be needed ...",c:"in",d:600}
 ];
 
 /* 阶段 1：第 13 秒，崩溃 */
