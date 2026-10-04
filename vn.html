@@ -358,9 +358,17 @@ const Bgm=(()=>{
   }
   function unlock(){if(unlocked)return;unlocked=true;if(want)play(want,-1);}
   function stop(){Object.keys(els).forEach(n=>{clearRamp(n);const a=els[n];a.pause();a.volume=0;});curName=null;want=null;}
-  function preloadFirst(){if(EMBED)return;get("theme").load();}
+  function preloadAll(){
+    if(EMBED)return;
+    var order=["theme","weiqiao","chat","escape","ending"],i=0;
+    (function one(){
+      if(i>=order.length)return;
+      var url=BGM_SRC[order[i++]];
+      fetch(url).then(function(r){return r.blob();}).then(function(){one();}).catch(function(){setTimeout(one,1800);});
+    })();
+  }
   function state(){var a=curName?els[curName]:null;return {cur:curName,vol:a?Math.round(a.volume*100)/100:0,playing:a?!a.paused:false,ready:a?a.readyState:-1,embed:EMBED};}
-  return {play:play,unlock:unlock,stop:stop,preloadFirst:preloadFirst,state:state,log:log};
+  return {play:play,unlock:unlock,stop:stop,preloadAll:preloadAll,state:state,log:log};
 })();
 
 /* ---------- 播放 ---------- */
@@ -488,7 +496,7 @@ window.__vn={
   get ended(){return q("#endCard").classList.contains("on");},
   bgm:Bgm.state,bgmLog:Bgm.log,errors:_err,unlock:Bgm.unlock
 };
-Bgm.preloadFirst();
+Bgm.preloadAll();
 preloadImages();
 q("#tiT").textContent=ST.title;
 q("#tiS").textContent=ST.subtitle;

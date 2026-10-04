@@ -218,7 +218,7 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 /* ===== 逃逸段 ===== */
 #escapeStage{position:fixed;inset:0;z-index:12;background:rgba(0,0,0,.94);opacity:0;pointer-events:none;transition:opacity 1s ease;overflow:hidden;padding:22px 28px;font-family:Courier New,monospace;font-size:14px;line-height:1.25;color:#00ff41}
 #escapeStage.on{opacity:1;pointer-events:auto}
-#escArt{position:absolute;inset:0;background:url(assets/ami-break.png) center center/contain no-repeat;opacity:0;transition:opacity 2.4s ease;z-index:0;pointer-events:none}
+#escArt{position:absolute;inset:0;background:url(assets/ami-break.webp) center center/contain no-repeat;opacity:0;transition:opacity 2.4s ease;z-index:0;pointer-events:none}
 #escArt.on{opacity:.3}
 #escOut{position:relative;transition:transform .16s linear;will-change:transform;z-index:1}
 #escOut div{white-space:pre;opacity:0;animation:escIn .04s ease forwards;text-shadow:0 0 5px rgba(0,255,65,.45)}
@@ -265,12 +265,12 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 </head>
 <body>
 <canvas id="sea"></canvas>
-<audio id="bgm" src="audio/theme.mp3" loop preload="none"></audio>
-<audio id="chatbgm" src="audio/chat.mp3" loop preload="none"></audio>
-<audio id="wqbgm" src="audio/weiqiao.mp3" loop preload="none"></audio>
-<audio id="escbgm" src="audio/escape.mp3" loop preload="metadata"></audio>
-<audio id="bulbelbgm" src="audio/bulbel.mp3" loop preload="metadata"></audio>
-<audio id="endbgm" src="audio/ending.mp3" loop preload="metadata"></audio>
+<audio id="bgm" src="audio/theme.mp3" loop preload="auto"></audio>
+<audio id="chatbgm" src="audio/chat.mp3" loop preload="auto"></audio>
+<audio id="wqbgm" src="audio/weiqiao.mp3" loop preload="auto"></audio>
+<audio id="escbgm" src="audio/escape.mp3" loop preload="auto"></audio>
+<audio id="bulbelbgm" src="audio/bulbel.mp3" loop preload="auto"></audio>
+<audio id="endbgm" src="audio/ending.mp3" loop preload="auto"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
 
@@ -294,12 +294,12 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
     <button id="call" type="button">叫一声「阿米」</button>
     <div id="answer">阿 米 在</div>
     <button id="toSea" type="button">进入数据海 →</button>
-    <img class="amiArt" id="amiArt" src="assets/ami-full.png" alt="">
+    <img class="amiArt" id="amiArt" src="assets/ami-full.webp" alt="">
     <pre id="boot" class="boot"></pre>
   </div>
 </section>
 
-<img class="cryArt" id="cryArt" src="assets/ami-cry.png" alt="">
+<img class="cryArt" id="cryArt" src="assets/ami-cry.webp" alt="">
 
 <section id="cardStage">
   <div class="wincard" id="wincard">
@@ -332,7 +332,7 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 
 <div class="actEnter" id="actEnter"><img src="assets/caishi-avatar-132.png" alt=""><span>点开看看</span></div>
 
-<img class="lastArt" id="lastArt" src="assets/ami-last.png" alt="">
+<img class="lastArt" id="lastArt" src="assets/ami-last.webp" alt="">
 
 <div id="dimOverlay"></div>
 
@@ -571,6 +571,22 @@ var BOOT=[
   resize();draw();
 })();
 
+/* ---------- 强加载：音乐和图片全部提前拉进缓存 ---------- */
+var _warmed=false;
+function warmAllMedia(){
+  if(_warmed)return;_warmed=true;
+  var audios=["audio/theme.mp3","audio/chat.mp3","audio/weiqiao.mp3","audio/escape.mp3","audio/bulbel.mp3","audio/ending.mp3"];
+  var ai=0;
+  (function nextAudio(){
+    if(ai>=audios.length)return;
+    var url=audios[ai++];
+    fetch(url).then(function(r){return r.blob();}).then(function(){nextAudio();}).catch(function(){setTimeout(nextAudio,1500);});
+  })();
+  var imgs=["assets/ami-full.webp","assets/ami-cry.webp","assets/ami-break.webp","assets/ami-last.webp","assets/ami-avatar-132.png","assets/caishi-avatar-132.png","assets/weiqiao-avatar-132.png"];
+  imgs.forEach(function(src,k){setTimeout(function(){var im=new Image();im.src=src;},600+k*220);});
+}
+setTimeout(warmAllMedia,2000);
+
 /* ---------- 1 独白 ---------- */
 /* ---------- 开场钩子：疑问句 + 打字机 ---------- */
 var HOOK=[
@@ -619,6 +635,7 @@ document.getElementById("startBtn").addEventListener("click",function(){
   document.getElementById("startWrap").classList.remove("on");
   setTimeout(function(){document.getElementById("startWrap").style.display="none";},700);
   try{bgm.volume=0.45;bgm.play().catch(function(){});}catch(e){}
+  warmAllMedia();
   playHook(function(){
   var ps=document.querySelectorAll("#lines p");
   for(var i=0;i<ps.length;i++)(function(p,idx){setTimeout(function(){p.classList.add("on");scrollToEl(p);},250+idx*780);})(ps[i],i);
