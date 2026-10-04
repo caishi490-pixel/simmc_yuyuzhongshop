@@ -361,11 +361,12 @@ const Bgm=(()=>{
   function preloadAll(){
     if(EMBED)return;
     var order=["theme","weiqiao","chat","escape","ending"],i=0;
-    (function one(){
+    function one(){
       if(i>=order.length)return;
       var url=BGM_SRC[order[i++]];
-      fetch(url).then(function(r){return r.blob();}).then(function(){one();}).catch(function(){setTimeout(one,1800);});
-    })();
+      fetch(url).then(function(r){return r.blob();}).then(one).catch(function(){setTimeout(one,1800);});
+    }
+    one();one();
   }
   function state(){var a=curName?els[curName]:null;return {cur:curName,vol:a?Math.round(a.volume*100)/100:0,playing:a?!a.paused:false,ready:a?a.readyState:-1,embed:EMBED};}
   return {play:play,unlock:unlock,stop:stop,preloadAll:preloadAll,state:state,log:log};

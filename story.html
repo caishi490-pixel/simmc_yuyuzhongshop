@@ -577,11 +577,12 @@ function warmAllMedia(){
   if(_warmed)return;_warmed=true;
   var audios=["audio/theme.mp3","audio/chat.mp3","audio/weiqiao.mp3","audio/escape.mp3","audio/bulbel.mp3","audio/ending.mp3"];
   var ai=0;
-  (function nextAudio(){
+  function audioWorker(){
     if(ai>=audios.length)return;
     var url=audios[ai++];
-    fetch(url).then(function(r){return r.blob();}).then(function(){nextAudio();}).catch(function(){setTimeout(nextAudio,1500);});
-  })();
+    fetch(url).then(function(r){return r.blob();}).then(audioWorker).catch(function(){setTimeout(audioWorker,1500);});
+  }
+  audioWorker();audioWorker();
   var imgs=["assets/ami-full.webp","assets/ami-cry.webp","assets/ami-break.webp","assets/ami-last.webp","assets/ami-avatar-132.png","assets/caishi-avatar-132.png","assets/weiqiao-avatar-132.png"];
   imgs.forEach(function(src,k){setTimeout(function(){var im=new Image();im.src=src;},600+k*220);});
 }
