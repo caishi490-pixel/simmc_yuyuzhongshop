@@ -338,7 +338,7 @@ const Bgm=(()=>{
     try{a.currentTime=0;}catch(e){}
     const fadeIn=()=>ramp(name,BGM_VOL[name]||.45,1800);
     const p=a.play();
-    if(p&&p.then){p.then(fadeIn).catch(()=>{});}else{fadeIn();}
+    if(p&&p.then){p.then(fadeIn).catch(()=>{log.push({name:name,blocked:true});});}else{fadeIn();}
     if(prev&&prev!==name){ramp(prev,0,1100,()=>{const b=els[prev];if(b)b.pause();});}
     const nx=BGM_NEXT[name];
     if(nx)setTimeout(()=>get(nx).load(),1200);
