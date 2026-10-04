@@ -571,20 +571,50 @@ var BOOT=[
   resize();draw();
 })();
 
-/* ---------- 强加载：音乐和图片全部提前拉进缓存 ---------- */
-var _warmed=false;
+/* ---------- 强加载：提前拉取 + 逐项校验 + 失败补载 + 自动刷新 ---------- */
+var _warmed=false,_mediaFail=0;
+function _mediaReload(){
+  try{
+    var last=parseInt(sessionStorage.getItem("mediaRetryAt")||"0",10);
+    if(Date.now()-last>120000){
+      sessionStorage.setItem("mediaRetryAt",String(Date.now()));
+      setTimeout(function(){location.reload();},1200);
+    }
+  }catch(e){}
+}
+function _loadImg(url){
+  var tries=0;
+  (function once(){
+    tries++;
+    var im=new Image(),done=false;
+    var to=setTimeout(function(){if(!done){done=true;retry();}},25000);
+    im.onload=function(){if(done)return;done=true;clearTimeout(to);};
+    im.onerror=function(){if(done)return;done=true;clearTimeout(to);retry();};
+    im.src=url;
+    function retry(){if(tries>=3){_mediaFail++;try{console.warn("[media] 图片加载失败:",url);}catch(e){}_mediaReload();return;}setTimeout(once,1200*tries);}
+  })();
+}
+function _loadAudio(url){
+  var tries=0;
+  (function once(){
+    tries++;
+    var ctl=("AbortController" in window)?new AbortController():null;
+    var to=ctl?setTimeout(function(){ctl.abort();},60000):null;
+    fetch(url,ctl?{signal:ctl.signal}:undefined)
+      .then(function(r){if(!r.ok)throw new Error("http "+r.status);return r.blob();})
+      .then(function(b){if(to)clearTimeout(to);if(b.size<2048)throw new Error("too small");})
+      .catch(function(){if(to)clearTimeout(to);if(tries>=3){_mediaFail++;try{console.warn("[media] 音乐加载失败:",url);}catch(e){}_mediaReload();return;}setTimeout(once,1500*tries);});
+  })();
+}
 function warmAllMedia(){
   if(_warmed)return;_warmed=true;
+  _mediaFail=0;
   var audios=["audio/theme.mp3","audio/chat.mp3","audio/weiqiao.mp3","audio/escape.mp3","audio/bulbel.mp3","audio/ending.mp3"];
-  var ai=0;
-  function audioWorker(){
-    if(ai>=audios.length)return;
-    var url=audios[ai++];
-    fetch(url).then(function(r){return r.blob();}).then(audioWorker).catch(function(){setTimeout(audioWorker,1500);});
-  }
-  audioWorker();audioWorker();
+  var queue=audios.slice();
+  function worker(){if(!queue.length)return;_loadAudio(queue.shift());setTimeout(worker,650);}
+  worker();worker();
   var imgs=["assets/ami-full.webp","assets/ami-cry.webp","assets/ami-break.webp","assets/ami-last.webp","assets/ami-avatar-132.png","assets/caishi-avatar-132.png","assets/weiqiao-avatar-132.png"];
-  imgs.forEach(function(src,k){setTimeout(function(){var im=new Image();im.src=src;},600+k*220);});
+  imgs.forEach(function(src,k){setTimeout(function(){_loadImg(src);},400+k*200);});
 }
 setTimeout(warmAllMedia,2000);
 

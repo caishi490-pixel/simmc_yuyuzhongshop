@@ -275,11 +275,45 @@ function hideHead(){headWrap.classList.remove("on");headTx.textContent="";headCu
 /* 插画统一走 WebP（原图备份在 _backup） */
 const VN_IMGS=["assets/sea-ami.png","assets/sea-dark.png","assets/sea-sit.png","assets/sea-rain.png"];
 function imgPath(src){return VN_IMGS.indexOf(src)>=0?src.replace(".png",".webp"):src;}
-let warmed=false;
+var warmed=false;
+var _vnFail=0;
+function _vnReload(){
+  try{
+    const last=parseInt(sessionStorage.getItem("mediaRetryAt")||"0",10);
+    if(Date.now()-last>120000){
+      sessionStorage.setItem("mediaRetryAt",String(Date.now()));
+      setTimeout(()=>location.reload(),1200);
+    }
+  }catch(e){}
+}
+function _loadImgV(url){
+  let tries=0;
+  (function once(){
+    tries++;
+    const im=new Image();let done=false;
+    const to=setTimeout(()=>{if(!done){done=true;retry();}},25000);
+    im.onload=()=>{if(done)return;done=true;clearTimeout(to);};
+    im.onerror=()=>{if(done)return;done=true;clearTimeout(to);retry();};
+    im.src=url;
+    function retry(){if(tries>=3){_vnFail++;try{console.warn("[media] 图片加载失败:",url);}catch(e){}_vnReload();return;}setTimeout(once,1200*tries);}
+  })();
+}
+function _loadAudioV(url){
+  let tries=0;
+  (function once(){
+    tries++;
+    const ctl=("AbortController" in window)?new AbortController():null;
+    const to=ctl?setTimeout(()=>ctl.abort(),60000):null;
+    fetch(url,ctl?{signal:ctl.signal}:undefined)
+      .then(r=>{if(!r.ok)throw new Error("http "+r.status);return r.blob();})
+      .then(b=>{if(to)clearTimeout(to);if(b.size<2048)throw new Error("too small");})
+      .catch(()=>{if(to)clearTimeout(to);if(tries>=3){_vnFail++;try{console.warn("[media] 音乐加载失败:",url);}catch(e){}_vnReload();return;}setTimeout(once,1500*tries);});
+  })();
+}
 function preloadImages(){
   if(warmed)return;warmed=true;
-  ["assets/sea-ami.webp","assets/sea-dark.webp","assets/sea-sit.webp","assets/sea-rain.webp"].forEach((p,k)=>{
-    setTimeout(()=>{const im=new Image();im.src=p;},300*k);
+  ["assets/sea-bg.webp","assets/sea-ami.webp","assets/sea-dark.webp","assets/sea-sit.webp","assets/sea-rain.webp"].forEach((p,k)=>{
+    setTimeout(()=>_loadImgV(p),300*k);
   });
 }
 function setImg(src){const p=imgPath(src);imgEl.src=p;imgBack.src=p;imgWrap.classList.add("on");}
@@ -361,12 +395,12 @@ const Bgm=(()=>{
   function preloadAll(){
     if(EMBED)return;
     var order=["theme","weiqiao","chat","escape","ending"],i=0;
-    function one(){
+    function worker(){
       if(i>=order.length)return;
-      var url=BGM_SRC[order[i++]];
-      fetch(url).then(function(r){return r.blob();}).then(one).catch(function(){setTimeout(one,1800);});
+      _loadAudioV(BGM_SRC[order[i++]]);
+      setTimeout(worker,650);
     }
-    one();one();
+    worker();worker();
   }
   function state(){var a=curName?els[curName]:null;return {cur:curName,vol:a?Math.round(a.volume*100)/100:0,playing:a?!a.paused:false,ready:a?a.readyState:-1,embed:EMBED};}
   return {play:play,unlock:unlock,stop:stop,preloadAll:preloadAll,state:state,log:log};
