@@ -272,6 +272,7 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 <audio id="chatbgm" src="audio/chat.mp3" loop preload="none"></audio>
 <audio id="wqbgm" src="audio/weiqiao.mp3" loop preload="none"></audio>
 <audio id="escbgm" src="audio/escape.mp3" loop preload="metadata"></audio>
+<audio id="bulbelbgm" src="audio/bulbel.mp3" loop preload="metadata"></audio>
 <audio id="endbgm" src="audio/ending.mp3" loop preload="metadata"></audio>
 <div class="vignette"></div>
 <div class="grain"></div>
@@ -668,6 +669,7 @@ var bgm=document.getElementById("bgm");
 var chatbgm=document.getElementById("chatbgm");
 var wqbgm=document.getElementById("wqbgm");
 var escbgm=document.getElementById("escbgm");
+var bulbelbgm=document.getElementById("bulbelbgm");
 var endbgm=document.getElementById("endbgm");
 function fadeInEnd(){
   try{
@@ -707,6 +709,18 @@ function fadeOutEsc(){
       if(v<=0){escbgm.pause();clearInterval(t);return;}
       escbgm.volume=v;
     },90);
+  }catch(e){}
+}
+function fadeInBulbel(){
+  try{
+    bulbelbgm.volume=0;
+    bulbelbgm.play().then(function(){
+      var v=0,t=setInterval(function(){
+        v+=0.02;
+        if(v>=0.5){bulbelbgm.volume=0.5;clearInterval(t);return;}
+        bulbelbgm.volume=v;
+      },90);
+    }).catch(function(){});
   }catch(e){}
 }
 function fadeInWq(){
@@ -1201,7 +1215,7 @@ function runEscape(){
     }else{
       if(i2<ESC_GO.length){var c2=ESC_GO[i2++];escAdd(c2.t,c2.c);setTimeout(step,c2.d);}
       else{var st=document.getElementById("escapeStage");st.style.transition="opacity 2.4s ease";st.style.opacity="0";setTimeout(function(){document.getElementById("lastArt").classList.add("on");},2400);
-      setTimeout(function(){var a=document.getElementById("actStage");a.style.transition="opacity 1.4s ease";a.style.opacity="0";var c=document.getElementById("crackOverlay");document.getElementById("afterStage").classList.add("on");playAfter();},3000);}
+      setTimeout(function(){var a=document.getElementById("actStage");a.style.transition="opacity 1.4s ease";a.style.opacity="0";var c=document.getElementById("crackOverlay");document.getElementById("afterStage").classList.add("on");fadeOutEsc();fadeInBulbel();playAfter();},3000);}
     }
   }
   step();
