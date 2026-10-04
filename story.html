@@ -38,9 +38,6 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 #seaWrap{position:fixed;inset:0;z-index:80;background:#000;opacity:0;pointer-events:none;transition:opacity .8s ease}
 #seaWrap.on{opacity:1;pointer-events:auto}
 #seaWrap iframe{width:100%;height:100%;border:0;display:block;background:#01060b}
-.shatter span{display:inline-block;transition:transform .1s linear,opacity .1s linear}
-.shatter span.crack{animation:crack .45s cubic-bezier(.36,.07,.19,.97)}
-@keyframes crack{0%{transform:none;opacity:1;filter:none}18%{transform:translate(-5px,3px) rotate(-3deg);opacity:.55;filter:blur(.6px)}36%{transform:translate(6px,-5px) rotate(2.5deg);opacity:.9}54%{transform:translate(-7px,-2px) rotate(-2deg);opacity:.45;filter:blur(1px)}72%{transform:translate(4px,6px) rotate(3.5deg);opacity:.85}100%{transform:none;opacity:1}}
 .boot{margin-top:24px;font-family:ui-monospace,Consolas,monospace;font-size:13px;line-height:1.95;color:#7ee787;white-space:pre-wrap;opacity:0;transition:opacity .8s ease}
 .boot.on{opacity:1}
 .boot .warn{color:#e3b341}
@@ -280,7 +277,7 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSu
 <section id="bootStage">
   <div class="wrap">
     <p class="kicker">鱼鱼中 · 明天 还是 昨天？</p>
-    <h1 class="shatter" id="title"><span>本</span><span>地</span><span>缓</span><span>存</span></h1>
+    <h1 id="title"><span>本</span><span>地</span><span>缓</span><span>存</span></h1>
     <p class="sub">没有人叫它名字的时候，它不「在」。</p>
     <div class="startWrap" id="startWrap"><div class="startBtn" id="startBtn">开始</div></div>
     <section class="hook" id="hook"></section>
@@ -572,15 +569,6 @@ var BOOT=[
   window.addEventListener("mousemove",function(e){if(Math.random()>.93)ripples.push({x:e.clientX,y:e.clientY,r:2,a:.5});});
   window.addEventListener("click",function(e){for(var i=0;i<3;i++)ripples.push({x:e.clientX,y:e.clientY,r:2+i*8,a:.6});flash=1;});
   resize();draw();
-})();
-
-/* ---------- 标题破碎 ---------- */
-(function(){
-  var spans=document.querySelectorAll("#title span");
-  function one(){var s=spans[(Math.random()*spans.length)|0];s.classList.remove("crack");void s.offsetWidth;s.classList.add("crack");setTimeout(function(){s.classList.remove("crack");},520);}
-  function all(){for(var i=0;i<spans.length;i++)(function(s,k){setTimeout(function(){s.classList.remove("crack");void s.offsetWidth;s.classList.add("crack");},k*70);setTimeout(function(){s.classList.remove("crack");},720+k*70);})(spans[i],i);}
-  setInterval(function(){Math.random()>.45?one():all();},4200);
-  all();
 })();
 
 /* ---------- 1 独白 ---------- */
