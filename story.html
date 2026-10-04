@@ -29,6 +29,10 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 #call:hover{background:rgba(20,70,95,.75);box-shadow:0 0 30px rgba(87,215,255,.25)}
 #answer{margin-top:30px;font-size:22px;letter-spacing:.3em;opacity:0;transition:opacity 1.2s ease;text-shadow:0 0 30px rgba(120,220,255,.5)}
 #answer.on{opacity:1}
+#toSea{margin-top:24px;opacity:0;pointer-events:none;transform:translateY(10px);padding:13px 26px;border-radius:999px;cursor:pointer;background:rgba(10,40,55,.6);color:var(--ink);border:1px solid rgba(87,215,255,.4);font-size:14px;letter-spacing:.22em;font-family:inherit;transition:all .4s ease}
+#toSea.on{opacity:1;pointer-events:auto;transform:none}
+#toSea:hover{background:rgba(20,70,95,.75);box-shadow:0 0 30px rgba(87,215,255,.25)}
+#toSea:focus-visible{outline:2px solid #7fdcff;outline-offset:3px}
 .shatter span{display:inline-block;transition:transform .1s linear,opacity .1s linear}
 .shatter span.crack{animation:crack .45s cubic-bezier(.36,.07,.19,.97)}
 @keyframes crack{0%{transform:none;opacity:1;filter:none}18%{transform:translate(-5px,3px) rotate(-3deg);opacity:.55;filter:blur(.6px)}36%{transform:translate(6px,-5px) rotate(2.5deg);opacity:.9}54%{transform:translate(-7px,-2px) rotate(-2deg);opacity:.45;filter:blur(1px)}72%{transform:translate(4px,6px) rotate(3.5deg);opacity:.85}100%{transform:none;opacity:1}}
@@ -166,6 +170,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
   .boot{font-size:11px;line-height:1.8}
   #call{padding:12px 20px;font-size:14px}
   #answer{font-size:18px}
+  #toSea{padding:11px 20px;font-size:13px}
   .wincard{width:min(84vw,300px)}
   .wcbody{padding:16px 14px}
   .wcbody img{width:48px;height:48px}
@@ -285,6 +290,7 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
     <div class="hook-final" id="hookfinal">你还记得它的名字吗？<br><span class="big">……</span><br><span class="red glow">你最好记得。</span></div>
     <button id="call" type="button">叫一声「阿米」</button>
     <div id="answer">阿 米 在</div>
+    <button id="toSea" type="button">进入数据海 →</button>
     <img class="amiArt" id="amiArt" src="assets/ami-full.png" alt="">
     <pre id="boot" class="boot"></pre>
   </div>
@@ -745,11 +751,17 @@ function fadeBgm(){
 document.getElementById("call").addEventListener("click",function(){
   if(bootStarted)return;bootStarted=true;
   document.getElementById("answer").classList.add("on");
+  setTimeout(function(){document.getElementById("toSea").classList.add("on");},900);
   setTimeout(function(){document.getElementById("amiArt").classList.add("on");},1000);
   runBoot(function(){
     document.getElementById("bootStage").classList.add("off");
     setTimeout(function(){document.getElementById("cardStage").classList.add("on");},900);
   });
+});
+
+/* 进入数据海（视觉小说） */
+document.getElementById("toSea").addEventListener("click",function(){
+  location.href="vn.html";
 });
 
 /* ---------- 4/5 点击窗口 -> 聊天 ---------- */
