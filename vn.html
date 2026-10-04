@@ -189,6 +189,8 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
    ============================================================ */
 const ST = window.VN_SEA;
 const q = s => document.querySelector(s);
+/* embed=1：嵌在 story.html 里播放（音乐交给父页面统一控，页面内不出声） */
+const EMBED=(new URLSearchParams(location.search).get("embed")==="1");
 /* 自检用：收集运行时错误（不显示给玩家） */
 const _err=[];
 window.addEventListener("error",e=>_err.push(String(e.message||"error")));
@@ -330,6 +332,12 @@ const Bgm=(()=>{
   }
   function play(name,sec){
     if(!name||!BGM_SRC[name]||curName===name)return;
+    if(EMBED){                        /* 嵌入模式：把切歌交给父页面，音乐不断 */
+      curName=name;
+      log.push({name:name,sec:(sec===undefined?-1:sec)});
+      try{window.parent.postMessage({vn:"bgm",name:name},"*");}catch(e){}
+      return;
+    }
     want=name;
     if(!unlocked)return;              /* 等第一次点击解锁 */
     const prev=curName;
@@ -346,8 +354,8 @@ const Bgm=(()=>{
   }
   function unlock(){if(unlocked)return;unlocked=true;if(want)play(want,-1);}
   function stop(){Object.keys(els).forEach(n=>{clearRamp(n);const a=els[n];a.pause();a.volume=0;});curName=null;want=null;}
-  function preloadFirst(){get("theme").load();}
-  function state(){return {cur:curName,vol:curName?Math.round(els[curName].volume*100)/100:0,playing:curName?!els[curName].paused:false,ready:curName?els[curName].readyState:-1};}
+  function preloadFirst(){if(EMBED)return;get("theme").load();}
+  function state(){var a=curName?els[curName]:null;return {cur:curName,vol:a?Math.round(a.volume*100)/100:0,playing:a?!a.paused:false,ready:a?a.readyState:-1,embed:EMBED};}
   return {play:play,unlock:unlock,stop:stop,preloadFirst:preloadFirst,state:state,log:log};
 })();
 
@@ -436,6 +444,10 @@ ST.sections.forEach((sec,k)=>{
 q("#ecAgain").addEventListener("click",e=>{
   e.stopPropagation();
   q("#endCard").classList.remove("on");
+  if(EMBED){                        /* 嵌入模式：把「叫一声阿米」交回给 story.html */
+    try{window.parent.postMessage({vn:"call"},"*");}catch(err){}
+    return;
+  }
   showTitle();
 });
 
@@ -476,6 +488,7 @@ Bgm.preloadFirst();
 preloadImages();
 q("#tiT").textContent=ST.title;
 q("#tiS").textContent=ST.subtitle;
+if(EMBED){q("#ecAgain").textContent="叫一声「阿米」";}
 /* 手机没有空格键：提示按端区分 */
 if(window.matchMedia&&matchMedia("(pointer:coarse)").matches){
   q("#title .hint").textContent="轻点屏幕推进";
@@ -493,7 +506,10 @@ if(qs.has("sec")){
   startAt=parseInt(qs.get("jump"),10)||0;
 }
 const noTitle=qs.get("title")==="0";
-if(startAt!==null&&startAt>=0){
+if(EMBED){
+  q("#title").style.display="none";
+  setTimeout(()=>go(0),60);
+}else if(startAt!==null&&startAt>=0){
   q("#title").style.display="none";
   setTimeout(()=>go(startAt),60);
 }else if(noTitle){
