@@ -17,11 +17,17 @@ body.dim #bg,body.dim #img{filter:brightness(.45) saturate(.7)}
 body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite alternate}
 @keyframes riseIn{from{transform:scale(1.16) translateY(46px);opacity:.25}to{transform:scale(1.05) translateY(0);opacity:1}}
 
-/* ---------- 插画层 ---------- */
+/* ---------- 插画层（竖屏不裁主体：模糊铺底 + 完整插画） ---------- */
 #img{position:fixed;inset:0;z-index:2;opacity:0;transition:opacity 1.8s ease;pointer-events:none}
 #img.on{opacity:1}
-#img img{width:100%;height:100%;object-fit:cover;object-position:center 40%;transform:scale(1.06);transition:transform 9s ease}
-#img.on img{transform:scale(1.005)}
+#img img{position:absolute;inset:0;width:100%;height:100%}
+#img #imgBack{object-fit:cover;filter:blur(30px) brightness(.42) saturate(.85);transform:scale(1.12)}
+#img #imgEl{object-fit:cover;object-position:center 40%;transform:scale(1.06);transition:transform 9s ease;
+  filter:drop-shadow(0 16px 46px rgba(0,0,0,.5))}
+#img.on #imgEl{transform:scale(1.005)}
+@media (orientation:portrait){
+  #img #imgEl{object-fit:contain}
+}
 
 /* ---------- 可读性遮罩 ---------- */
 #shade{position:fixed;inset:0;z-index:3;pointer-events:none;
@@ -125,7 +131,7 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
 <body>
 
 <div id="bg"></div>
-<div id="img"><img id="imgEl" alt=""></div>
+<div id="img"><img id="imgBack" alt="" aria-hidden="true"><img id="imgEl" alt=""></div>
 <div id="shade"></div>
 <div id="vig"></div>
 <div id="veil"></div>
@@ -173,7 +179,7 @@ const q = s => document.querySelector(s);
 const _err=[];
 window.addEventListener("error",e=>_err.push(String(e.message||"error")));
 window.addEventListener("unhandledrejection",e=>_err.push("rej:"+String((e.reason&&e.reason.message)||e.reason||"")));
-const bgEl=q("#bg"), imgWrap=q("#img"), imgEl=q("#imgEl"), veil=q("#veil"),
+const bgEl=q("#bg"), imgWrap=q("#img"), imgEl=q("#imgEl"), imgBack=q("#imgBack"), veil=q("#veil"),
       txt=q("#txt"), tri=q("#tri"), bigWrap=q("#big"), bigTx=q("#bigTx"),
       headWrap=q("#headWrap"), headTx=q("#headTx");
 
@@ -245,7 +251,7 @@ function showHead(s){
   setTimeout(()=>{headTx.textContent=s;headWrap.classList.add("on");},180);
 }
 function hideHead(){headWrap.classList.remove("on");headTx.textContent="";headCur="";}
-function setImg(src){imgEl.src=src;imgWrap.classList.add("on");}
+function setImg(src){imgEl.src=src;imgBack.src=src;imgWrap.classList.add("on");}
 function imgOff(){imgWrap.classList.remove("on");}
 function doFx(f){
   if(f==="dim"){document.body.classList.add("dim");}
