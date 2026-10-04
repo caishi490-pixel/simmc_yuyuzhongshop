@@ -10,7 +10,7 @@ html,body{margin:0;height:100%}
 body{background:#01060b;color:#d8ecf8;font-family:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;overflow:hidden;cursor:pointer;user-select:none}
 
 /* ---------- 背景：数据海 ---------- */
-#bg{position:fixed;inset:0;background:url(assets/sea-bg.png) center 42%/cover no-repeat;z-index:1;
+#bg{position:fixed;inset:0;background:url(assets/sea-bg.webp) center 42%/cover no-repeat;z-index:1;
     animation:kb 64s ease-in-out infinite alternate;transition:filter 2s ease}
 @keyframes kb{from{transform:scale(1.05) translateY(0)}to{transform:scale(1.14) translateY(-14px)}}
 body.dim #bg,body.dim #img{filter:brightness(.45) saturate(.7)}
@@ -102,7 +102,7 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
 /* ---------- 标题页 ---------- */
 #title{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:20px;transition:opacity 1.4s ease;
-  background:linear-gradient(180deg,rgba(3,9,15,.72),rgba(3,9,15,.9)),url(assets/sea-bg.png) center 42%/cover no-repeat}
+  background:linear-gradient(180deg,rgba(3,9,15,.72),rgba(3,9,15,.9)),url(assets/sea-bg.webp) center 42%/cover no-repeat}
 #title.off{opacity:0;pointer-events:none}
 #title .t{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
   font-weight:300;font-size:clamp(58px,10.5vw,132px);line-height:1.15;letter-spacing:.34em;text-indent:.34em;
@@ -251,7 +251,17 @@ function showHead(s){
   setTimeout(()=>{headTx.textContent=s;headWrap.classList.add("on");},180);
 }
 function hideHead(){headWrap.classList.remove("on");headTx.textContent="";headCur="";}
-function setImg(src){imgEl.src=src;imgBack.src=src;imgWrap.classList.add("on");}
+/* 插画统一走 WebP（原图备份在 _backup） */
+const VN_IMGS=["assets/sea-ami.png","assets/sea-dark.png","assets/sea-sit.png","assets/sea-rain.png"];
+function imgPath(src){return VN_IMGS.indexOf(src)>=0?src.replace(".png",".webp"):src;}
+let warmed=false;
+function preloadImages(){
+  if(warmed)return;warmed=true;
+  ["assets/sea-ami.webp","assets/sea-dark.webp","assets/sea-sit.webp","assets/sea-rain.webp"].forEach((p,k)=>{
+    setTimeout(()=>{const im=new Image();im.src=p;},300*k);
+  });
+}
+function setImg(src){const p=imgPath(src);imgEl.src=p;imgBack.src=p;imgWrap.classList.add("on");}
 function imgOff(){imgWrap.classList.remove("on");}
 function doFx(f){
   if(f==="dim"){document.body.classList.add("dim");}
@@ -445,6 +455,7 @@ window.__vn={
   bgm:Bgm.state,bgmLog:Bgm.log,errors:_err,unlock:Bgm.unlock
 };
 Bgm.preloadFirst();
+preloadImages();
 q("#tiT").textContent=ST.title;
 q("#tiS").textContent=ST.subtitle;
 
