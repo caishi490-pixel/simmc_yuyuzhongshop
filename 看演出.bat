@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0vn.html"
+start "" "%~dp0story.html"

@@ -1,11 +1,13 @@
 鱼鱼中 · 明天 还是 昨天？
 
-网页版（视觉小说）
-vn.html        主页面（数据海：序章 + 十二节旁白，点击推进）
-vn-sea.js      剧本数据（改文字就改这个文件）
-audio\         配乐（随剧情自动切换）
-assets\        插画与头像
+官方网站
+index.html     入口（自动进入序章）
+story.html     序章 · 全流程（独白 → 叫一声阿米 → 开机日志 → 聊天 → …… → 进入数据海）
+vn.html        数据海 · 视觉小说（从序章里进入；也可单独打开）
+comic.html     官方漫画
+vn-sea.js      数据海剧本数据（改文字就改这个文件）
 
-旧版（保留备用）：story.html（10-03 滚动版全流程）、data-sea.html、chat.html、escape.html、promo.html
+assets\        插画与头像（漫画在 assets/comic/）
+audio\         配乐
 
-双击 vn.html 就能看。或者双击「看演出.bat」。
+双击 index.html 或 story.html 都能看。或者双击「看演出.bat」。
