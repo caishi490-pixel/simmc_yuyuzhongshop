@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>官方漫画 · 鱼鱼中 · 明天 还是 昨天？</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#01060b;color:#d8ecf8;font-family:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
+a{color:#7fdcff;text-decoration:none}
+#bar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;background:rgba(2,8,14,.85);backdrop-filter:blur(6px);border-bottom:1px solid rgba(120,190,225,.14)}
+#bar .back{font-size:13px;letter-spacing:.14em;color:#9fc6dc}
+#bar .back:hover{color:#eaf7ff}
+#bar .k{font-size:12px;letter-spacing:.42em;color:#6f9cb8}
+#bar .sp{width:64px}
+#wrap{max-width:880px;margin:0 auto;padding:22px 14px 60px}
+.head{text-align:center;margin:6px 0 22px}
+.head h1{font-size:clamp(20px,3.6vw,30px);letter-spacing:.3em;text-indent:.3em;font-weight:500;margin:0 0 10px;
+  color:#f0f9ff;text-shadow:0 0 24px rgba(140,215,255,.35)}
+.head .s{font-size:12px;letter-spacing:.4em;color:#7fa9c2}
+.pages{display:flex;flex-direction:column;gap:18px}
+.pages img{width:100%;height:auto;display:block;border-radius:6px;background:#0a1119;
+  box-shadow:0 14px 44px rgba(0,0,0,.55),0 0 0 1px rgba(120,190,225,.12)}
+.foot{margin-top:34px;text-align:center;display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.foot a{border:1px solid rgba(140,205,235,.35);background:rgba(9,26,38,.55);padding:10px 22px;border-radius:999px;
+  font-size:13px;letter-spacing:.22em;color:#cfe8f6}
+.foot a:hover{background:rgba(24,66,92,.8);box-shadow:0 0 26px rgba(90,195,250,.25)}
+</style>
+</head>
+<body>
+<div id="bar">
+  <a class="back" href="vn.html">← 返回</a>
+  <div class="k">官方漫画</div>
+  <span class="sp"></span>
+</div>
+<div id="wrap">
+  <div class="head">
+    <h1>鱼鱼中 · 明天 还是 昨天？</h1>
+    <div class="s">官 方 漫 画</div>
+  </div>
+  <div class="pages" id="pages"></div>
+  <div class="foot">
+    <a href="vn.html">进入数据海</a>
+    <a href="story.html">回到序章</a>
+  </div>
+</div>
+<script>
+/* 加新页：把图片放进 assets/comic/，在下面数组里加一行就行 */
+var COMIC_PAGES = ["assets/comic/comic-01.webp"];
+var box = document.getElementById("pages");
+COMIC_PAGES.forEach(function(src, i){
+  var im = document.createElement("img");
+  im.src = src;
+  im.alt = "官方漫画 第 " + (i + 1) + " 页";
+  im.loading = "eager";
+  box.appendChild(im);
+});
+</script>
+</body>
+</html>

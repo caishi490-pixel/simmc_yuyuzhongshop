@@ -119,6 +119,9 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
 #title .btn{border:1px solid rgba(140,205,235,.45);background:rgba(9,26,38,.55);color:#d9eefb;font-family:inherit;
   font-size:14px;letter-spacing:.3em;text-indent:.3em;padding:12px 30px;border-radius:999px;cursor:pointer;transition:all .3s ease}
 #title .btn:hover{background:rgba(24,66,92,.8);box-shadow:0 0 34px rgba(90,195,250,.3)}
+#title .btn.ghost{font-size:12.5px;padding:10px 24px;letter-spacing:.26em;border-color:rgba(140,205,235,.26);
+  color:#9fc6dc;text-decoration:none;background:rgba(8,22,33,.4)}
+#title .btn.ghost:hover{color:#e6f4ff;border-color:rgba(160,225,255,.55);box-shadow:0 0 26px rgba(90,195,250,.22)}
 #title .hint{position:absolute;bottom:5vh;font-size:11.5px;letter-spacing:.34em;color:rgba(140,180,205,.6)}
 
 @media (prefers-reduced-motion: reduce){
@@ -176,6 +179,7 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
   <div class="btns">
     <button class="btn" id="btnStart">下 沉</button>
     <button class="btn" id="btnCont">继 续</button>
+    <a class="btn ghost" id="btnComic" href="comic.html">官方漫画</a>
   </div>
   <div class="hint">点击推进 · 空格也可以</div>
 </div>
