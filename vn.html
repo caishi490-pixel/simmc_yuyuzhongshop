@@ -169,6 +169,10 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
    ============================================================ */
 const ST = window.VN_SEA;
 const q = s => document.querySelector(s);
+/* 自检用：收集运行时错误（不显示给玩家） */
+const _err=[];
+window.addEventListener("error",e=>_err.push(String(e.message||"error")));
+window.addEventListener("unhandledrejection",e=>_err.push("rej:"+String((e.reason&&e.reason.message)||e.reason||"")));
 const bgEl=q("#bg"), imgWrap=q("#img"), imgEl=q("#imgEl"), veil=q("#veil"),
       txt=q("#txt"), tri=q("#tri"), bigWrap=q("#big"), bigTx=q("#bigTx"),
       headWrap=q("#headWrap"), headTx=q("#headTx");
@@ -258,6 +262,64 @@ function fxDelay(f){
   return 1200;
 }
 
+/* ---------- BGM：随剧情切换、淡入淡出、预载下一首 ---------- */
+const BGM_SRC={theme:"audio/theme.mp3",weiqiao:"audio/weiqiao.mp3",chat:"audio/chat.mp3",escape:"audio/escape.mp3",ending:"audio/ending.mp3"};
+const BGM_VOL={theme:.45,weiqiao:.42,chat:.42,escape:.5,ending:.42};
+const BGM_NEXT={theme:"weiqiao",weiqiao:"chat",chat:"escape",escape:"ending"};
+function bgmFor(sec){
+  if(sec>=11)return "escape";
+  if(sec>=9)return "chat";
+  if(sec>=7)return "weiqiao";
+  return "theme";
+}
+const Bgm=(()=>{
+  const els={},ramps={};
+  const log=[];
+  let curName=null,unlocked=false,want=null;
+  function get(name){
+    if(!els[name]){
+      const a=new Audio(BGM_SRC[name]);
+      a.loop=true;a.preload="auto";a.volume=0;
+      els[name]=a;
+    }
+    return els[name];
+  }
+  function clearRamp(name){if(ramps[name]){clearInterval(ramps[name]);delete ramps[name];}}
+  function ramp(name,to,ms,done){
+    clearRamp(name);
+    const a=get(name),from=a.volume,steps=Math.max(1,Math.round(ms/60));
+    let k=0;
+    if(steps<=1){a.volume=to;if(done)done();return;}
+    ramps[name]=setInterval(()=>{
+      k++;
+      const p=Math.min(1,k/steps);
+      a.volume=Math.max(0,Math.min(1,from+(to-from)*p));
+      if(k>=steps){clearRamp(name);a.volume=to;if(done)done();}
+    },60);
+  }
+  function play(name,sec){
+    if(!name||!BGM_SRC[name]||curName===name)return;
+    want=name;
+    if(!unlocked)return;              /* 等第一次点击解锁 */
+    const prev=curName;
+    curName=name;
+    const a=get(name);
+    try{a.currentTime=0;}catch(e){}
+    const fadeIn=()=>ramp(name,BGM_VOL[name]||.45,1800);
+    const p=a.play();
+    if(p&&p.then){p.then(fadeIn).catch(()=>{});}else{fadeIn();}
+    if(prev&&prev!==name){ramp(prev,0,1100,()=>{const b=els[prev];if(b)b.pause();});}
+    const nx=BGM_NEXT[name];
+    if(nx)setTimeout(()=>get(nx).load(),1200);
+    log.push({name:name,sec:(sec===undefined?-1:sec)});
+  }
+  function unlock(){if(unlocked)return;unlocked=true;if(want)play(want,-1);}
+  function stop(){Object.keys(els).forEach(n=>{clearRamp(n);const a=els[n];a.pause();a.volume=0;});curName=null;want=null;}
+  function preloadFirst(){get("theme").load();}
+  function state(){return {cur:curName,vol:curName?Math.round(els[curName].volume*100)/100:0,playing:curName?!els[curName].paused:false,ready:curName?els[curName].readyState:-1};}
+  return {play:play,unlock:unlock,stop:stop,preloadFirst:preloadFirst,state:state,log:log};
+})();
+
 /* ---------- 播放 ---------- */
 function go(i){
   if(i<0)i=0;
@@ -265,6 +327,7 @@ function go(i){
   gen++;clearTimer();
   pos=i;save();
   const st=flat[i];if(!st)return;
+  Bgm.play(bgmFor(st.sec),st.sec);
   hideBig();
   txt.classList.remove("sink");
 
@@ -284,6 +347,7 @@ function scheduleAuto(){
 }
 function showEnd(e){
   mode="end";
+  Bgm.play("ending");
   txt.textContent="";txt.style.opacity=0;tri.classList.remove("on");
   q("#ecT").textContent=e.t;q("#ecS").textContent=e.s;
   q("#endCard").classList.add("on");
@@ -344,6 +408,7 @@ q("#ecAgain").addEventListener("click",e=>{
 /* ---------- 标题页 ---------- */
 function showTitle(){
   mode="";pos=-1;
+  Bgm.stop();
   const sv=readSave();
   q("#btnCont").style.display=(sv>2)?"":"none";
   q("#title").classList.remove("off");
@@ -356,14 +421,24 @@ function start(jump){
   q("#title").classList.add("off");
   setTimeout(()=>{go(jump===undefined?0:jump);},800);
 }
-q("#btnStart").addEventListener("click",e=>{e.stopPropagation();start(0);});
+q("#btnStart").addEventListener("click",e=>{e.stopPropagation();Bgm.unlock();start(0);});
 q("#btnCont").addEventListener("click",e=>{
   e.stopPropagation();
+  Bgm.unlock();
   const sv=readSave();
   start((sv>0)?sv:0);
 });
 
 /* ---------- 初始 ---------- */
+window.__vn={
+  get pos(){return pos;},
+  get sec(){return (pos>=0&&flat[pos])?flat[pos].sec:-1;},
+  get head(){return (pos>=0&&flat[pos])?ST.sections[flat[pos].sec].head:"";},
+  get img(){return imgEl.getAttribute("src")||"";},
+  get ended(){return q("#endCard").classList.contains("on");},
+  bgm:Bgm.state,bgmLog:Bgm.log,errors:_err,unlock:Bgm.unlock
+};
+Bgm.preloadFirst();
 q("#tiT").textContent=ST.title;
 q("#tiS").textContent=ST.subtitle;
 
