@@ -1,9 +1,11 @@
 鱼鱼中 · 明天 还是 昨天？
-网页版
 
-story.html     主页面（从头演到尾：独白 → 叫一声阿米 → 开机日志 → 窗口 → 聊天）
-data-sea.html  数据海（旧版，单独一页）
-chat.html      聊天框（旧版，单独一页）
-assets\        阿米、彩石、唯俏的头像
+网页版（视觉小说）
+vn.html        主页面（数据海：序章 + 十二节旁白，点击推进）
+vn-sea.js      剧本数据（改文字就改这个文件）
+audio\         配乐（随剧情自动切换）
+assets\        插画与头像
 
-双击 story.html 就能看。或者双击「看演出.bat」。
+旧版（保留备用）：story.html（10-03 滚动版全流程）、data-sea.html、chat.html、escape.html、promo.html
+
+双击 vn.html 就能看。或者双击「看演出.bat」。
