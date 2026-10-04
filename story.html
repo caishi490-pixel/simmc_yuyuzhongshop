@@ -629,7 +629,8 @@ document.getElementById("startBtn").addEventListener("click",function(){
   var ps=document.querySelectorAll("#lines p");
   for(var i=0;i<ps.length;i++)(function(p,idx){setTimeout(function(){p.classList.add("on");scrollToEl(p);},250+idx*780);})(ps[i],i);
   setTimeout(function(){var hf=document.getElementById("hookfinal");hf.classList.add("on");scrollToEl(hf);},250+ps.length*780+400);
-  setTimeout(function(){var cb=document.getElementById("call");cb.classList.add("on");scrollToEl(cb);},250+ps.length*780+2600);
+  setTimeout(function(){var cb=document.getElementById("call");cb.classList.add("on");scrollToEl(cb);
+    setTimeout(function(){document.getElementById("toSea").classList.add("on");},900);},250+ps.length*780+2600);
   });
 }, {once:true});
 
