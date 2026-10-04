@@ -33,6 +33,9 @@ h1{font-size:clamp(38px,9vw,88px);line-height:1.05;margin:0 0 18px;letter-spacin
 #toSea.on{opacity:1;pointer-events:auto;transform:none}
 #toSea:hover{background:rgba(20,70,95,.75);box-shadow:0 0 30px rgba(87,215,255,.25)}
 #toSea:focus-visible{outline:2px solid #7fdcff;outline-offset:3px}
+#seaWrap{position:fixed;inset:0;z-index:80;background:#000;opacity:0;pointer-events:none;transition:opacity .8s ease}
+#seaWrap.on{opacity:1;pointer-events:auto}
+#seaWrap iframe{width:100%;height:100%;border:0;display:block;background:#01060b}
 .shatter span{display:inline-block;transition:transform .1s linear,opacity .1s linear}
 .shatter span.crack{animation:crack .45s cubic-bezier(.36,.07,.19,.97)}
 @keyframes crack{0%{transform:none;opacity:1;filter:none}18%{transform:translate(-5px,3px) rotate(-3deg);opacity:.55;filter:blur(.6px)}36%{transform:translate(6px,-5px) rotate(2.5deg);opacity:.9}54%{transform:translate(-7px,-2px) rotate(-2deg);opacity:.45;filter:blur(1px)}72%{transform:translate(4px,6px) rotate(3.5deg);opacity:.85}100%{transform:none;opacity:1}}
@@ -760,15 +763,58 @@ document.getElementById("call").addEventListener("click",function(){
   });
 });
 
-/* 进入数据海（视觉小说） */
+/* ---------- 数据海（内嵌播放：音乐统一由这一页控制，不断） ---------- */
+var _seaAudio={theme:bgm,chat:chatbgm,weiqiao:wqbgm,escape:escbgm,ending:endbgm};
+var _seaVol={theme:.45,chat:.42,weiqiao:.42,escape:.5,ending:.42};
+var _seaCur="theme";
+function _ramp(a,to,ms,done){
+  if(a._ramp){clearInterval(a._ramp);a._ramp=null;}
+  var from=a.volume,steps=Math.max(1,Math.round(ms/90)),k=0;
+  if(steps<=1){a.volume=to;if(done)done();return;}
+  a._ramp=setInterval(function(){
+    k++;
+    var p2=Math.min(1,k/steps);
+    a.volume=Math.max(0,Math.min(1,from+(to-from)*p2));
+    if(k>=steps){clearInterval(a._ramp);a._ramp=null;a.volume=to;if(done)done();}
+  },90);
+}
+function _playTrack(name){
+  if(!_seaAudio[name]||_seaCur===name)return;
+  _seaCur=name;
+  Object.keys(_seaAudio).forEach(function(k){
+    var a=_seaAudio[k];
+    if(k===name){
+      a.volume=0;
+      var pr=a.play();
+      var up=function(){_ramp(a,_seaVol[k]||.45,1600);};
+      if(pr&&pr.then){pr.then(up).catch(function(){});}else{up();}
+    }else{
+      _ramp(a,0,900,function(){try{a.pause();}catch(e){}});
+    }
+  });
+}
+window.__story={play:_playTrack,state:function(){
+  var o={};Object.keys(_seaAudio).forEach(function(k){var a=_seaAudio[k];o[k]={paused:a.paused,vol:Math.round(a.volume*100)/100,time:Math.round(a.currentTime*10)/10};});
+  o.cur=_seaCur;return o;
+}};
 document.getElementById("toSea").addEventListener("click",function(){
-  location.href="vn.html";
+  document.getElementById("seaFrame").src="vn.html?embed=1";
+  document.getElementById("seaWrap").classList.add("on");
+  this.classList.remove("on");
+});
+window.addEventListener("message",function(e){
+  var m=e.data||{};
+  if(m.vn==="bgm"&&m.name){_playTrack(m.name);}
+  else if(m.vn==="call"){
+    document.getElementById("seaWrap").classList.remove("on");
+    setTimeout(function(){try{document.getElementById("seaFrame").src="about:blank";}catch(err){}},900);
+    document.getElementById("call").click();
+  }
 });
 
 /* ---------- 4/5 点击窗口 -> 聊天 ---------- */
 document.getElementById("wincard").addEventListener("click",function(){
-  fadeBgm();
-  fadeInChat();
+  _playTrack("chat");
   document.getElementById("cardStage").classList.remove("on");
   setTimeout(function(){
     document.getElementById("appStage").classList.add("on");
@@ -1272,5 +1318,6 @@ function sendMsg(){var v=ta.value.replace(/\s+$/,"");if(!v)return;bubble("cai",v
 document.getElementById("send").addEventListener("click",sendMsg);
 ta.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}});
 </script>
+<div id="seaWrap"><iframe id="seaFrame" title="数据海" allow="autoplay"></iframe></div>
 </body>
 </html>
