@@ -90,9 +90,9 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
 #endCard{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
   background:radial-gradient(90% 80% at 50% 40%,#0a1a28 0%,#020609 70%);opacity:0;pointer-events:none;transition:opacity 2s ease}
 #endCard.on{opacity:1;pointer-events:auto}
-#endCard .t{font-size:clamp(34px,6vw,70px);letter-spacing:.42em;text-indent:.42em;font-weight:600;color:transparent;
-  background:linear-gradient(180deg,#eafaff 0%,#6fd6ff 55%,#1d6f92 100%);-webkit-background-clip:text;background-clip:text;
-  text-shadow:0 0 50px rgba(70,200,255,.2)}
+#endCard .t{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:300;font-size:clamp(42px,7.2vw,88px);letter-spacing:.42em;text-indent:.42em;
+  color:#f3faff;text-shadow:0 0 24px rgba(150,220,255,.4),0 0 100px rgba(90,180,240,.28),0 10px 40px rgba(0,0,0,.5)}
 #endCard .s{font-size:clamp(13px,1.3vw,16px);letter-spacing:.4em;color:#7fa9c2}
 #endCard .again{margin-top:20px;border:1px solid rgba(140,200,230,.4);background:transparent;color:#bfe0f0;
   font-size:12px;letter-spacing:.3em;padding:9px 22px;border-radius:999px;cursor:pointer;font-family:inherit}
@@ -103,11 +103,14 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
   gap:20px;transition:opacity 1.4s ease;
   background:linear-gradient(180deg,rgba(3,9,15,.72),rgba(3,9,15,.9)),url(assets/sea-bg.png) center 42%/cover no-repeat}
 #title.off{opacity:0;pointer-events:none}
-#title .k{font-size:12.5px;letter-spacing:.55em;color:#6f9cb8}
-#title .t{font-size:clamp(56px,10vw,120px);letter-spacing:.3em;text-indent:.3em;font-weight:600;color:transparent;
-  background:linear-gradient(180deg,#f2fbff 0%,#7fd8ff 52%,#1e6f92 100%);-webkit-background-clip:text;background-clip:text;
-  text-shadow:0 0 70px rgba(80,200,255,.24)}
-#title .s{font-size:clamp(12px,1.2vw,15px);letter-spacing:.42em;color:#87b3cc;margin-bottom:26px}
+#title .t{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  font-weight:300;font-size:clamp(58px,10.5vw,132px);line-height:1.15;letter-spacing:.34em;text-indent:.34em;
+  color:#f3faff;animation:titleGlow 7s ease-in-out infinite alternate}
+@keyframes titleGlow{
+  from{text-shadow:0 0 18px rgba(150,220,255,.3),0 0 70px rgba(90,180,240,.2),0 10px 40px rgba(0,0,0,.55)}
+  to{text-shadow:0 0 32px rgba(175,232,255,.55),0 0 130px rgba(100,190,250,.4),0 10px 40px rgba(0,0,0,.55)}
+}
+#title .s{font-size:clamp(12.5px,1.25vw,16px);letter-spacing:.5em;text-indent:.5em;color:#b7d6e8;margin-bottom:30px}
 #title .btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 #title .btn{border:1px solid rgba(140,205,235,.45);background:rgba(9,26,38,.55);color:#d9eefb;font-family:inherit;
   font-size:14px;letter-spacing:.3em;text-indent:.3em;padding:12px 30px;border-radius:999px;cursor:pointer;transition:all .3s ease}
@@ -154,7 +157,6 @@ body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite a
 </div>
 
 <div id="title">
-  <div class="k" id="tiK"></div>
   <div class="t" id="tiT"></div>
   <div class="s" id="tiS"></div>
   <div class="btns">
@@ -362,7 +364,6 @@ q("#btnCont").addEventListener("click",e=>{
 });
 
 /* ---------- 初始 ---------- */
-q("#tiK").textContent=ST.kicker;
 q("#tiT").textContent=ST.title;
 q("#tiS").textContent=ST.subtitle;
 

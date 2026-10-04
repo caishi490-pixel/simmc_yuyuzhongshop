@@ -16,8 +16,7 @@
 window.VN_SEA = {
   id: "sea",
   title: "数据海",
-  kicker: "鱼鱼中 · 明天 还是 昨天？",
-  subtitle: "阿米旁白 · 视觉小说",
+  subtitle: "鱼鱼中 · 明天 还是 昨天？",
   sections: [
 
   { head: "一 · 模型", steps: [
