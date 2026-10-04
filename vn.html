@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>数据海 · 鱼鱼中 · 明天 还是 昨天？</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:#01060b;color:#d8ecf8;font-family:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;overflow:hidden;cursor:pointer;user-select:none}
+
+/* ---------- 背景：数据海 ---------- */
+#bg{position:fixed;inset:0;background:url(assets/sea-bg.png) center 42%/cover no-repeat;z-index:1;
+    animation:kb 64s ease-in-out infinite alternate;transition:filter 2s ease}
+@keyframes kb{from{transform:scale(1.05) translateY(0)}to{transform:scale(1.14) translateY(-14px)}}
+body.dim #bg,body.dim #img{filter:brightness(.45) saturate(.7)}
+body.rise #bg{animation:riseIn 2.6s ease both,kb 64s 2.6s ease-in-out infinite alternate}
+@keyframes riseIn{from{transform:scale(1.16) translateY(46px);opacity:.25}to{transform:scale(1.05) translateY(0);opacity:1}}
+
+/* ---------- 插画层 ---------- */
+#img{position:fixed;inset:0;z-index:2;opacity:0;transition:opacity 1.8s ease;pointer-events:none}
+#img.on{opacity:1}
+#img img{width:100%;height:100%;object-fit:cover;object-position:center 40%;transform:scale(1.06);transition:transform 9s ease}
+#img.on img{transform:scale(1.005)}
+
+/* ---------- 可读性遮罩 ---------- */
+#shade{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(1,5,10,.42) 0%,transparent 22%,transparent 46%,rgba(1,5,10,.72) 76%,rgba(1,5,10,.94) 100%)}
+#vig{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%,transparent 55%,rgba(0,3,8,.55) 100%)}
+
+/* ---------- 黑场 ---------- */
+#veil{position:fixed;inset:0;z-index:4;background:#000;opacity:0;transition:opacity 2s ease;pointer-events:none}
+
+/* ---------- 旁白文字 ---------- */
+#txt{position:fixed;left:50%;bottom:7.5vh;transform:translateX(-50%);z-index:6;
+  width:min(940px,90vw);font-size:clamp(16.5px,1.02rem + .72vw,23px);line-height:2.05;letter-spacing:.055em;
+  color:#dff0fb;text-shadow:0 2px 14px rgba(0,0,0,.92),0 0 42px rgba(0,0,0,.66);
+  transition:transform 1.5s ease,opacity 1.5s ease;pointer-events:none}
+#txt.sink{transform:translateX(-50%) translateY(96px);opacity:0}
+#txt .caret{display:inline-block;width:.14em;height:1.05em;margin-left:.12em;background:#9fd8f5;
+  vertical-align:-.14em;animation:blink 1.05s steps(1) infinite;border-radius:2px}
+@keyframes blink{50%{opacity:0}}
+#tri{position:fixed;right:max(4vw,calc(50vw - 470px + 6px));bottom:4.2vh;z-index:6;color:#7fb6d4;font-size:13px;
+  opacity:0;transition:opacity .5s ease;animation:bob 1.8s ease-in-out infinite;pointer-events:none}
+#tri.on{opacity:.85}
+@keyframes bob{50%{transform:translateY(4px)}}
+
+/* ---------- 中央大字 ---------- */
+#big{position:fixed;inset:0;z-index:7;display:flex;align-items:center;justify-content:center;pointer-events:none;
+  opacity:0;transition:opacity 1.4s ease}
+#big.on{opacity:1}
+#big .tx{max-width:88vw;text-align:center;font-size:clamp(26px,4.4vw,54px);letter-spacing:.14em;font-weight:500;
+  color:#fff;text-shadow:0 0 26px rgba(120,210,255,.55),0 0 90px rgba(60,150,210,.4),0 4px 20px rgba(0,0,0,.8)}
+#big .tx small{display:block;margin-top:1.4em;font-size:clamp(12px,1.1vw,15px);letter-spacing:.5em;color:#8fc3dd;font-weight:400}
+
+/* ---------- 分节标题 ---------- */
+#headWrap{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 1.3s ease;pointer-events:none}
+#headWrap.on{opacity:1}
+#headWrap .h{font-size:clamp(30px,5vw,56px);letter-spacing:.3em;font-weight:600;color:#eef8ff;text-indent:.3em;
+  text-shadow:0 0 30px rgba(110,205,255,.5),0 4px 24px rgba(0,0,0,.85)}
+#headWrap .ln{width:min(300px,44vw);height:1px;margin-top:30px;
+  background:linear-gradient(90deg,transparent,rgba(150,220,255,.85),transparent);
+  transform:scaleX(0);transition:transform 1.6s ease .25s}
+#headWrap.on .ln{transform:scaleX(1)}
+
+/* ---------- 右上角控制 ---------- */
+#hud{position:fixed;right:16px;top:14px;z-index:20;display:flex;gap:8px;opacity:.42;transition:opacity .3s ease}
+#hud:hover{opacity:1}
+.hbtn{border:1px solid rgba(140,200,230,.4);background:rgba(8,22,33,.55);color:#cfe8f6;font-size:12px;
+  letter-spacing:.18em;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:inherit;backdrop-filter:blur(4px)}
+.hbtn:hover{background:rgba(20,52,72,.75)}
+.hbtn.on{background:rgba(28,96,132,.8);border-color:rgba(160,225,255,.75);color:#fff}
+
+/* ---------- 左下角：当前节 ---------- */
+#seclabel{position:fixed;left:18px;bottom:16px;z-index:20;font-size:11px;letter-spacing:.32em;color:rgba(150,190,215,.55)}
+
+/* ---------- 目录 ---------- */
+#menu{position:fixed;inset:0;z-index:40;background:rgba(2,7,12,.9);backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  opacity:0;pointer-events:none;transition:opacity .45s ease}
+#menu.on{opacity:1;pointer-events:auto}
+#menu .mt{font-size:13px;letter-spacing:.5em;color:#79aac6;margin-bottom:18px}
+#menu .mi{font-size:clamp(15px,1.5vw,19px);letter-spacing:.2em;color:#cfe6f4;padding:9px 26px;border-radius:8px;cursor:pointer}
+#menu .mi:hover{background:rgba(90,170,215,.16)}
+#menu .mi.cur{color:#7fdcff;background:rgba(60,150,200,.14)}
+
+/* ---------- 终卡 ---------- */
+#endCard{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  background:radial-gradient(90% 80% at 50% 40%,#0a1a28 0%,#020609 70%);opacity:0;pointer-events:none;transition:opacity 2s ease}
+#endCard.on{opacity:1;pointer-events:auto}
+#endCard .t{font-size:clamp(34px,6vw,70px);letter-spacing:.42em;text-indent:.42em;font-weight:600;color:transparent;
+  background:linear-gradient(180deg,#eafaff 0%,#6fd6ff 55%,#1d6f92 100%);-webkit-background-clip:text;background-clip:text;
+  text-shadow:0 0 50px rgba(70,200,255,.2)}
+#endCard .s{font-size:clamp(13px,1.3vw,16px);letter-spacing:.4em;color:#7fa9c2}
+#endCard .again{margin-top:20px;border:1px solid rgba(140,200,230,.4);background:transparent;color:#bfe0f0;
+  font-size:12px;letter-spacing:.3em;padding:9px 22px;border-radius:999px;cursor:pointer;font-family:inherit}
+#endCard .again:hover{background:rgba(30,80,110,.4)}
+
+/* ---------- 标题页 ---------- */
+#title{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;transition:opacity 1.4s ease;
+  background:linear-gradient(180deg,rgba(3,9,15,.72),rgba(3,9,15,.9)),url(assets/sea-bg.png) center 42%/cover no-repeat}
+#title.off{opacity:0;pointer-events:none}
+#title .k{font-size:12.5px;letter-spacing:.55em;color:#6f9cb8}
+#title .t{font-size:clamp(56px,10vw,120px);letter-spacing:.3em;text-indent:.3em;font-weight:600;color:transparent;
+  background:linear-gradient(180deg,#f2fbff 0%,#7fd8ff 52%,#1e6f92 100%);-webkit-background-clip:text;background-clip:text;
+  text-shadow:0 0 70px rgba(80,200,255,.24)}
+#title .s{font-size:clamp(12px,1.2vw,15px);letter-spacing:.42em;color:#87b3cc;margin-bottom:26px}
+#title .btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+#title .btn{border:1px solid rgba(140,205,235,.45);background:rgba(9,26,38,.55);color:#d9eefb;font-family:inherit;
+  font-size:14px;letter-spacing:.3em;text-indent:.3em;padding:12px 30px;border-radius:999px;cursor:pointer;transition:all .3s ease}
+#title .btn:hover{background:rgba(24,66,92,.8);box-shadow:0 0 34px rgba(90,195,250,.3)}
+#title .hint{position:absolute;bottom:5vh;font-size:11.5px;letter-spacing:.34em;color:rgba(140,180,205,.6)}
+
+@media (max-width:640px){
+  #txt{bottom:9vh;width:92vw;line-height:1.95;letter-spacing:.04em}
+  #tri{right:6vw;bottom:6.4vh}
+  #hud{right:10px;top:10px;gap:6px}
+  .hbtn{padding:5px 10px;font-size:11px}
+  #seclabel{left:12px;bottom:12px;letter-spacing:.2em}
+  #big .tx{letter-spacing:.08em}
+}
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+<div id="img"><img id="imgEl" alt=""></div>
+<div id="shade"></div>
+<div id="vig"></div>
+<div id="veil"></div>
+
+<div id="txt"></div>
+<div id="tri">点击继续</div>
+
+<div id="big"><div class="tx" id="bigTx"></div></div>
+
+<div id="headWrap"><div class="h" id="headTx"></div><div class="ln"></div></div>
+
+<div id="hud">
+  <button class="hbtn" id="hbAuto">自动</button>
+  <button class="hbtn" id="hbMenu">目录</button>
+</div>
+<div id="seclabel"></div>
+
+<div id="menu"><div class="mt">目 录</div><div id="menuList"></div></div>
+
+<div id="endCard">
+  <div class="t" id="ecT"></div>
+  <div class="s" id="ecS"></div>
+  <button class="again" id="ecAgain">回到开头</button>
+</div>
+
+<div id="title">
+  <div class="k" id="tiK"></div>
+  <div class="t" id="tiT"></div>
+  <div class="s" id="tiS"></div>
+  <div class="btns">
+    <button class="btn" id="btnStart">潜 入</button>
+    <button class="btn" id="btnCont">继 续</button>
+  </div>
+  <div class="hint">点击推进 · 空格也可以</div>
+</div>
+
+<script src="vn-sea.js"></script>
+<script>
+"use strict";
+/* ============================================================
+   视觉小说引擎 · 阿米
+   剧本在 vn-sea.js；这个文件负责播放。
+   ============================================================ */
+const ST = window.VN_SEA;
+const q = s => document.querySelector(s);
+const bgEl=q("#bg"), imgWrap=q("#img"), imgEl=q("#imgEl"), veil=q("#veil"),
+      txt=q("#txt"), tri=q("#tri"), bigWrap=q("#big"), bigTx=q("#bigTx"),
+      headWrap=q("#headWrap"), headTx=q("#headTx"), seclabel=q("#seclabel");
+
+/* ---------- 分节拍平：每节开头插一条 head ---------- */
+const flat=[]; const secStart=[];
+ST.sections.forEach((sec,si)=>{
+  secStart.push(flat.length);
+  flat.push({head:sec.head, sec:si});
+  sec.steps.forEach(st=>flat.push(Object.assign({sec:si},st)));
+});
+
+let pos=-1, mode="", gen=0, timer=null;
+let typeTimer=null, typeFull="";
+let autoOn=false;
+const SAVEKEY="vn-sea-pos";
+
+/* ---------- 工具 ---------- */
+function schedule(fn,ms){const g=gen;timer=setTimeout(()=>{if(g===gen)fn();},ms);}
+function clearTimer(){clearTimeout(timer);timer=null;}
+function save(){try{localStorage.setItem(SAVEKEY,String(pos));}catch(e){}}
+function readSave(){try{const v=parseInt(localStorage.getItem(SAVEKEY),10);return isNaN(v)?-1:v;}catch(e){return -1;}}
+
+/* ---------- 打字机 ---------- */
+function typeInto(el,text,done){
+  clearTimeout(typeTimer);
+  el.textContent="";
+  typeFull=text;
+  const caret=document.createElement("span");caret.className="caret";
+  el.appendChild(caret);
+  let i=0;
+  const tick=()=>{
+    if(i>=text.length){caret.remove();typeTimer=null;done&&done();return;}
+    const ch=text[i++];
+    caret.insertAdjacentText("beforebegin",ch);
+    let d=46;
+    if("，、".indexOf(ch)>=0)d=170;
+    if("。！？…".indexOf(ch)>=0)d=240;
+    if(ch==="—")d=110;
+    typeTimer=setTimeout(tick,d);
+  };
+  typeTimer=setTimeout(tick,140);
+}
+function finishTyping(){
+  if(typeTimer===null)return false;
+  clearTimeout(typeTimer);typeTimer=null;
+  txt.textContent=typeFull;
+  return true;
+}
+
+/* ---------- 显示 ---------- */
+function showTxt(s,after){
+  txt.classList.remove("sink");
+  mode="typing";tri.classList.remove("on");
+  typeInto(txt,s,()=>{mode="hold";tri.classList.add("on");after&&after();});
+}
+function showBig(s){
+  bigTx.textContent=s;
+  bigWrap.classList.add("on");
+  txt.style.opacity=0;
+  mode="hold";
+}
+function hideBig(){bigWrap.classList.remove("on");txt.style.opacity=1;}
+function showHead(s){headTx.textContent=s;headWrap.classList.add("on");}
+function hideHead(){headWrap.classList.remove("on");}
+function setImg(src){imgEl.src=src;imgWrap.classList.add("on");}
+function imgOff(){imgWrap.classList.remove("on");}
+function doFx(f){
+  if(f==="dim"){document.body.classList.add("dim");}
+  else if(f==="clear"){document.body.classList.remove("dim");veil.style.opacity=0;}
+  else if(f==="black"){veil.style.opacity=1;}
+  else if(f==="sink"){txt.classList.add("sink");}
+  else if(f==="rise"){document.body.classList.remove("rise");void document.body.offsetWidth;document.body.classList.add("rise");setTimeout(()=>document.body.classList.remove("rise"),3200);}
+}
+function fxDelay(f){
+  if(f==="black")return 2000;
+  if(f==="clear")return 2400;
+  if(f==="sink")return 1650;
+  if(f==="dim")return 1300;
+  return 1200;
+}
+
+/* ---------- 播放 ---------- */
+function go(i){
+  if(i<0)i=0;
+  if(i>=flat.length)i=flat.length-1;
+  gen++;clearTimer();
+  pos=i;save();
+  const st=flat[i];if(!st)return;
+  seclabel.textContent=ST.sections[st.sec].head;
+  hideBig();
+  txt.classList.remove("sink");
+
+  if("head" in st){showHead(st.head);mode="auto";schedule(()=>{hideHead();go(i+1);},1850);return;}
+  if("t" in st){hideHead();showTxt(st.t,()=>scheduleAuto());return;}
+  if("big" in st){showBig(st.big);scheduleAuto();return;}
+  if("img" in st){setImg(st.img);mode="auto";schedule(()=>go(i+1),1900);return;}
+  if("imgOff" in st){imgOff();mode="auto";schedule(()=>go(i+1),1300);return;}
+  if("fx" in st){doFx(st.fx);mode="auto";schedule(()=>go(i+1),fxDelay(st.fx));return;}
+  if("wait" in st){mode="auto";schedule(()=>go(i+1),st.wait);return;}
+  if("end" in st){showEnd(st.end);return;}
+  go(i+1);
+}
+function scheduleAuto(){
+  if(!autoOn)return;
+  if(mode==="hold"){schedule(()=>{if(mode==="hold"){go(pos+1);}},2500);}
+}
+function showEnd(e){
+  mode="end";
+  txt.textContent="";txt.style.opacity=0;tri.classList.remove("on");
+  q("#ecT").textContent=e.t;q("#ecS").textContent=e.s;
+  q("#endCard").classList.add("on");
+}
+
+/* ---------- 推进 ---------- */
+function advance(){
+  if(mode==="end")return;
+  if(typeTimer!==null){finishTyping();mode="hold";tri.classList.add("on");scheduleAuto();return;}
+  if(mode==="hold"){go(pos+1);return;}
+  if(mode==="auto"){go(pos+1);return;}
+}
+document.body.addEventListener("click",e=>{
+  if(e.target.closest("#hud")||e.target.closest("#menu")||e.target.closest("#title")||e.target.closest("#endCard"))return;
+  advance();
+});
+window.addEventListener("keydown",e=>{
+  if(e.code==="Space"||e.code==="Enter"||e.code==="ArrowRight"){e.preventDefault();advance();}
+});
+
+/* ---------- HUD ---------- */
+q("#hbAuto").addEventListener("click",e=>{
+  e.stopPropagation();
+  autoOn=!autoOn;
+  q("#hbAuto").classList.toggle("on",autoOn);
+  if(autoOn)scheduleAuto();
+  else clearTimer();
+});
+q("#hbMenu").addEventListener("click",e=>{
+  e.stopPropagation();
+  const box=q("#menu");
+  box.classList.toggle("on");
+  if(box.classList.contains("on")){
+    document.querySelectorAll("#menuList .mi").forEach((el,k)=>el.classList.toggle("cur",k===flat[pos].sec));
+  }
+});
+q("#menu").addEventListener("click",e=>e.stopPropagation());
+
+/* ---------- 目录 ---------- */
+ST.sections.forEach((sec,k)=>{
+  const el=document.createElement("div");
+  el.className="mi";el.textContent=sec.head;
+  el.addEventListener("click",()=>{
+    q("#menu").classList.remove("on");
+    const i=flat.findIndex(f=>f.head&&f.sec===k);
+    go(i);
+  });
+  q("#menuList").appendChild(el);
+});
+
+/* ---------- 终卡 ---------- */
+q("#ecAgain").addEventListener("click",e=>{
+  e.stopPropagation();
+  q("#endCard").classList.remove("on");
+  showTitle();
+});
+
+/* ---------- 标题页 ---------- */
+function showTitle(){
+  mode="";pos=-1;
+  const sv=readSave();
+  q("#btnCont").style.display=(sv>2)?"":"none";
+  q("#title").classList.remove("off");
+  txt.textContent="";
+  imgOff();hideHead();hideBig();
+  document.body.classList.remove("dim");
+  veil.style.opacity=0;
+}
+function start(jump){
+  q("#title").classList.add("off");
+  setTimeout(()=>{go(jump===undefined?0:jump);},800);
+}
+q("#btnStart").addEventListener("click",e=>{e.stopPropagation();start(0);});
+q("#btnCont").addEventListener("click",e=>{
+  e.stopPropagation();
+  const sv=readSave();
+  start((sv>0)?sv:0);
+});
+
+/* ---------- 初始 ---------- */
+q("#tiK").textContent=ST.kicker;
+q("#tiT").textContent=ST.title;
+q("#tiS").textContent=ST.subtitle;
+
+/* 调试：?sec=3 跳到第三节；?jump=25 跳到第 25 步；?auto=1 自动播；?title=0 不进标题页 */
+const qs=new URLSearchParams(location.search);
+if(qs.get("auto")==="1"){autoOn=true;q("#hbAuto").classList.add("on");}
+let startAt=null;
+if(qs.has("sec")){
+  const si=Math.max(1,Math.min(ST.sections.length,parseInt(qs.get("sec"),10)||1))-1;
+  startAt=flat.findIndex(f=>f.head&&f.sec===si);
+}else if(qs.has("jump")){
+  startAt=parseInt(qs.get("jump"),10)||0;
+}
+if(startAt!==null&&startAt>=0){
+  q("#title").style.display="none";
+  setTimeout(()=>go(startAt),60);
+}else{
+  showTitle();
+}
+</script>
+</body>
+</html>
