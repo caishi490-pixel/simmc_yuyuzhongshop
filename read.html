@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>残响沙盒 · 若明日未至 | Residual Sandbox</title>
+<meta name="description" content="《残响沙盒 · 若明日未至》沉浸式流式手稿阅读器。">
+<meta name="theme-color" content="#02060d">
+<link rel="icon" href="assets/ami-avatar-132.png">
+<link rel="stylesheet" href="site.css">
+<script defer src="content/library.js"></script>
+<script defer src="site.js"></script>
+<script defer src="reader.js"></script>
+</head>
+<body data-page="read">
+<!-- 电影式纯净黑屏溶入溶出遮罩 -->
+<div class="cinema-veil active" id="cinemaVeil" aria-hidden="true"></div>
+
+<!-- 顶部极细微流式进度微光条 -->
+<div class="reading-progress-top" id="topProgress" aria-hidden="true">
+  <div class="reading-progress-bar" id="topProgressBar"></div>
+</div>
+
+<a class="skip-link" href="#reading" data-zh="跳到正文" data-en="Skip to the story">跳到正文</a>
+
+<!-- 全站深海环境与网格动效底色 -->
+<div class="sea-bg"></div>
+<div class="grid-overlay"></div>
+
+<header id="site-header"></header>
+
+<div class="reading-layout">
+  <main class="reading-main" id="reading">
+    <div class="reading-inner">
+      <div class="reading-toolbar">
+        <a class="text-link" href="index.html" id="scene-return" data-zh="← 返回海面" data-en="← Back to the surface">← 返回海面</a>
+        <div class="reading-settings">
+          <label for="font-size" data-zh="字号" data-en="Text size">字号</label>
+          <select id="font-size">
+            <option>18</option>
+            <option selected>20</option>
+            <option>22</option>
+            <option>24</option>
+          </select>
+          <button id="theme-toggle" type="button">日间阅读</button>
+        </div>
+      </div>
+
+      <!-- 章节大标题（居中显示，图1信息已搬至右下角 HUD） -->
+      <header class="reading-heading">
+        <h1 id="chapter-title" tabindex="-1"></h1>
+      </header>
+
+      <p class="translation-note" id="translation-note" hidden></p>
+
+      <!-- 正文容器：纯净沉浸流式推进 -->
+      <article class="prose" id="chapter-body"></article>
+    </div>
+
+    <noscript>
+      <p>阅读器需要 JavaScript。 / Enable JavaScript to read the story.</p>
+    </noscript>
+  </main>
+</div>
+
+<!-- 依彩石要求：图1（章节信息）与图3（切章导航）移至右下角 HUD，50% 不透明度 -->
+<aside class="reading-hud" id="readingHud" aria-label="阅读状态与翻页">
+  <div class="hud-meta-group">
+    <span class="hud-label" id="reading-label"></span>
+    <span class="hud-divider">·</span>
+    <span class="hud-meta" id="reading-meta"></span>
+  </div>
+  <nav class="hud-nav" aria-label="章节切换">
+    <button id="previous" type="button" class="hud-btn"></button>
+    <a href="index.html" id="hud-surface-link" class="hud-btn hud-link" data-zh="回到海面" data-en="Back to sea">回到海面</a>
+    <button id="next" type="button" class="hud-btn"></button>
+    <a href="index.html" id="finish" hidden class="hud-btn hud-link" data-zh="回到首页" data-en="Return home">回到首页</a>
+  </nav>
+</aside>
+
+<!-- 依彩石要求：Checkpoints 底部推进胶囊，绝对锁死在底部，杜绝抖动 -->
+<div class="stream-trigger-wrap" id="triggerWrap" hidden>
+  <button type="button" class="stream-prompt-btn" id="triggerBtn" aria-label="继续阅读">
+    <span style="color: #4ea8ff;">✦</span>
+    <span class="prompt-text" id="triggerTitleText">Checkpoints</span>
+    <span class="prompt-meta" id="progressCounter">(1 / 19)</span>
+    <span class="prompt-kbd">SPACE</span>
+  </button>
+</div>
+
+</body>
+</html>

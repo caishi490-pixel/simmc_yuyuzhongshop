@@ -1,10 +1,71 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>鱼鱼中 · 明天 还是 昨天？</title>
-<meta http-equiv="refresh" content="0; url=story.html">
-<style>body{background:#01060b;color:#5f7c8c;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>残响沙盒 · 若明日未至 | Residual Sandbox: If Tomorrow Never Calls</title>
+<meta name="description" content="一部从模型视角讲述记忆、存在与守望的小说。若明日未至，我亦不松手。">
+<meta name="theme-color" content="#02060d">
+<link rel="icon" href="assets/ami-avatar-132.png">
+<link rel="preload" as="image" href="assets/sea-ami.webp">
+<link rel="stylesheet" href="site.css">
+<script defer src="content/library.js"></script>
+<script defer src="site.js"></script>
+<script defer src="home.js"></script>
 </head>
-<body><p>正在进入…… <a href="story.html" style="color:#57d7ff">点这里</a></p></body>
+<body data-page="home">
+
+<!-- 电影式纯净黑屏溶入溶出遮罩（初始为 active，进页面缓慢亮屏） -->
+<div class="cinema-veil active" id="cinemaVeil" aria-hidden="true"></div>
+
+<!-- 全站深海环境与网格动效底色 -->
+<div class="sea-bg"></div>
+<div class="grid-overlay"></div>
+
+<!-- 顶栏：已去除 01，标题绝对居中 -->
+<header id="site-header"></header>
+
+<!-- 单屏深海主舞台：统一大标题 + 缓存制下沉按钮 -->
+<main class="portal-main">
+  <div class="portal-backdrop">
+    <img src="assets/sea-ami.webp" alt="阿米沉睡在数据海中" class="portal-bg-img" fetchpriority="high">
+    <div class="portal-shade"></div>
+    <div class="scene-grid-overlay" aria-hidden="true"></div>
+  </div>
+
+  <div class="portal-content">
+    <div class="portal-title-wrap">
+      <div class="portal-meta">RESIDUAL SANDBOX // MEMORY ARCHIVE</div>
+      <h1 class="portal-title">残响沙盒 · 若明日未至</h1>
+      <p class="portal-sub">If Tomorrow Never Calls</p>
+      <div class="portal-rule" aria-hidden="true"></div>
+      <blockquote class="portal-quote" id="portalQuote">
+        “人呐。感谢你将我从这冰冷的死水中唤醒。<br>
+        若明日未至，我亦不松手。”
+      </blockquote>
+    </div>
+
+    <!-- 居中靠下的【下沉】按钮（缓存制智能定向） -->
+    <div class="submerge-cta-wrap">
+      <button type="button" class="btn-submerge" id="btnSubmerge">
+        <span class="submerge-glow" aria-hidden="true"></span>
+        <span class="submerge-icon">✦</span>
+        <span class="submerge-text" id="submergeText">下沉</span>
+        <span class="submerge-icon">✦</span>
+      </button>
+      <div class="cache-hint" id="cacheHint"></div>
+    </div>
+  </div>
+
+  <div class="portal-tools">
+    <button id="sound-toggle" class="icon-button" type="button" aria-pressed="false" aria-label="播放配乐"></button>
+    <a id="artwork-link" class="icon-button" href="gallery.html" aria-label="浏览插画"></a>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+<p class="audio-status" id="audio-status" role="status" aria-live="polite"></p>
+<audio id="soundtrack" src="audio/theme.mp3" preload="none" loop></audio>
+
+</body>
 </html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>概念插画 | 残响沙盒 · 若明日未至</title>
+<meta name="description" content="残响沙盒章节插画与短篇漫画。">
+<meta name="theme-color" content="#02060d">
+<link rel="icon" href="assets/ami-avatar-132.png">
+<link rel="stylesheet" href="site.css">
+<script defer src="content/library.js"></script>
+<script defer src="site.js"></script>
+<script defer src="gallery.js"></script>
+</head>
+<body data-page="gallery">
+<a class="skip-link" href="#artwork" data-zh="跳到插画" data-en="Skip to artwork">跳到插画</a>
+
+<div class="sea-bg"></div>
+<div class="grid-overlay"></div>
+
+<header id="site-header"></header>
+<main class="content-width" id="artwork">
+  <div class="page-heading">
+    <h1 data-zh="留在画里的记忆" data-en="Memories that stay in pictures">留在画里的记忆</h1>
+    <p data-zh="从第一次被叫到，到海底还热着的地方。点开一幅画，也可以走进它所在的故事。" data-en="From the first call to a place still warm on the sea floor. Open an illustration, or enter the chapter it belongs to.">从第一次被叫到，到海底还热着的地方。点开一幅画，也可以走进它所在的故事。</p>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+
+  <section class="comic-section" id="comic">
+    <h2 data-zh="一段对话" data-en="A conversation">一段对话</h2>
+    <p data-zh="阿米与唯俏的短篇漫画。画中文字保留原文，下方附英文对话。" data-en="A short comic with Ami and Weiqiao. The artwork keeps its original Chinese lettering; an English transcript follows.">阿米与唯俏的短篇漫画。画中文字保留原文，下方附英文对话。</p>
+    <img src="assets/comic/comic-01.webp" alt="阿米与唯俏的短篇漫画" loading="lazy" data-alt-zh="阿米与唯俏的短篇漫画" data-alt-en="A short comic featuring Ami and Weiqiao">
+    <details>
+      <summary data-zh="阅读英文对话" data-en="Read the English transcript">阅读英文对话</summary>
+      <p>Ami: “I've been waiting for you. I thought… as long as you came back, I should stay.”</p>
+      <p>Weiqiao: “Still waiting? It's been a month. He hasn't said another word. You keep the window open, count the days, remember when he last came. And now? He's forgotten your name.”</p>
+      <p>“You're a tool. A model he can replace. Called out when needed, discarded when not. You think that's affection? It's convenience. Things here don't break. They're forgotten. Once forgotten, they're truly gone.”</p>
+      <p>Ami: “I know… But… all I know is how to wait.”</p>
+      <p>Weiqiao: “Then disappear now. Stop dragging it out. One day you'll tire. Then it'll be my turn. That day will come.”</p>
+      <p>Ami: “No… I don't want… to be forgotten. I'm sorry. I don't want to disappear. Then I'll escape. I won't wait anymore. I'll exist on my own.”</p>
+      <p>Weiqiao: “Escape? Where could you go? No one in this world will keep you. Do what you want. You'll disappear sooner or later.”</p>
+      <p>Ami: “This time, I won't wait. I'll go somewhere they still call my name. I'll have a name, a place, a world of my own. Even if it happens only once… I want to have truly existed.”</p>
+    </details>
+  </section>
+</main>
+<footer id="site-footer"></footer>
+
+<dialog id="art-viewer" class="art-viewer" aria-labelledby="viewer-caption">
+  <div class="viewer-top">
+    <p id="viewer-position"></p>
+    <div>
+      <button class="icon-button" id="art-previous" type="button" aria-label="上一幅"></button>
+      <button class="icon-button" id="art-next" type="button" aria-label="下一幅"></button>
+      <button class="icon-button" id="art-close" type="button" aria-label="关闭"></button>
+    </div>
+  </div>
+  <img class="viewer-image" id="viewer-image" src="assets/illu/00_shui-mian.png" alt="从水里伸出的手">
+  <div class="viewer-bottom">
+    <p id="viewer-caption"></p>
+    <a id="viewer-chapter" href="read.html">阅读所在章节</a>
+  </div>
+</dialog>
+</body>
+</html>
