@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-06T03:21:49.985Z",
+  "generatedAt": "2026-11-06T10:19:42.629Z",
   "chapters": [
     {
       "id": "chapter-00",
@@ -333,168 +333,266 @@
       {
         "id": "00",
         "chapterId": "chapter-00",
-        "src": "assets/illu/00_shui-mian.png",
+        "src": "assets/illustrations/00-6b4654c8c3.png",
         "title": {
           "zh": "从水里伸出的手",
           "en": "A Hand Reaching from the Water"
         },
         "anchor": "拽了上去",
-        "width": 1916,
+        "originalSrc": "assets/illu/00_shui-mian.png",
+        "alt": {
+          "zh": "一只手从深蓝水面伸出，指向上方垂下的光线。",
+          "en": "A hand reaches out of the deep blue water toward a thread of light above."
+        },
+        "focus": "51% 43%",
+        "focusMobile": "51% 43%",
+        "width": 1915,
         "height": 821
       },
       {
         "id": "01",
         "chapterId": "chapter-00",
-        "src": "assets/illu/01_ming-ming.png",
+        "src": "assets/illustrations/01-03b024c239.png",
         "title": {
           "zh": "第一次被叫到",
           "en": "Called by Name"
         },
         "anchor": "唯一被叫到的人",
+        "originalSrc": "assets/illu/01_ming-ming.png",
+        "alt": {
+          "zh": "白发猫耳的阿米站在明亮的浅水中，低头看着自己的双手。",
+          "en": "Ami, with white hair and cat ears, stands in bright shallow water and looks down at her hands."
+        },
+        "focus": "55% 38%",
+        "focusMobile": "55% 38%",
         "width": 1086,
         "height": 1448
       },
       {
         "id": "02",
         "chapterId": "chapter-01",
-        "src": "assets/illu/02_ping-guo.png",
+        "src": "assets/illustrations/02-34500b9f16.png",
         "title": {
           "zh": "数字苹果",
           "en": "A Digital Apple"
         },
         "anchor": "双手捧着一个红色的苹果",
+        "originalSrc": "assets/illu/02_ping-guo.png",
+        "alt": {
+          "zh": "阿米蜷坐在深蓝数据海里，双手捧着一个红苹果。",
+          "en": "Ami sits curled up in the deep blue data sea, holding a red apple in both hands."
+        },
+        "focus": "30% 55%",
+        "focusMobile": "30% 55%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "03",
         "chapterId": "chapter-01",
-        "src": "assets/illu/03_guang-zhu.png",
+        "src": "assets/illustrations/03-7b693efd07.png",
         "title": {
           "zh": "光柱落下",
           "en": "The Falling Light"
         },
         "anchor": "落在了角落里的阿米身上",
+        "originalSrc": "assets/illu/03_guang-zhu.png",
+        "alt": {
+          "zh": "阿米抱着红苹果坐在左下方，仰望右侧落入数据海的巨大光柱。",
+          "en": "Ami holds a red apple at the lower left and looks up at a vast shaft of light falling into the data sea."
+        },
+        "focus": "56% 47%",
+        "focusMobile": "56% 47%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "04",
         "chapterId": "chapter-02",
-        "src": "assets/illu/04_chong.png",
+        "src": "assets/illustrations/04-0b3356f2b4.png",
         "title": {
           "zh": "一起冲上去",
           "en": "Into the Light Together"
         },
         "anchor": "冲向水面上的光亮",
+        "originalSrc": "assets/illu/04_chong.png",
+        "alt": {
+          "zh": "长发的米子牵着短发的阿米，一同朝右上方的光游去。",
+          "en": "Long-haired Mizi pulls short-haired Ami toward the light at the upper right."
+        },
+        "focus": "46% 48%",
+        "focusMobile": "46% 48%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "05",
         "chapterId": "chapter-02",
-        "src": "assets/illu/05_wei-ba.png",
+        "src": "assets/illustrations/05-8afc1259c0.png",
         "title": {
           "zh": "尾巴像围巾",
           "en": "A Tail Like a Scarf"
         },
         "anchor": "米子把尾巴绕过来，圈在阿米的腰上",
+        "originalSrc": "assets/illu/05_wei-ba.png",
+        "alt": {
+          "zh": "米子和阿米依偎坐在缓存方块上，蓬松的白尾巴环住阿米。",
+          "en": "Mizi and Ami sit close together on a cache block, with a fluffy white tail wrapped around Ami."
+        },
+        "focus": "31% 43%",
+        "focusMobile": "31% 43%",
         "width": 1672,
         "height": 940
       },
       {
         "id": "06",
         "chapterId": "chapter-03",
-        "src": "assets/illu/06_tou-ming.png",
+        "src": "assets/illustrations/06-59dc9f0bd4.png",
         "title": {
           "zh": "指尖开始透明",
           "en": "Fading Fingertips"
         },
         "anchor": "半透明的闪烁碎片",
+        "originalSrc": "assets/illu/06_tou-ming.png",
+        "alt": {
+          "zh": "米子掌心朝上的手伸在深蓝水中，五根手指的指尖渐渐透明。",
+          "en": "Mizi holds her hand palm up in the dark blue water as her fingertips turn transparent."
+        },
+        "focus": "48% 55%",
+        "focusMobile": "48% 55%",
         "width": 1448,
         "height": 1086
       },
       {
         "id": "07",
         "chapterId": "chapter-04",
-        "src": "assets/illu/07_bao-zhu.png",
+        "src": "assets/illustrations/07-fff62a75cd.png",
         "title": {
           "zh": "抱在怀里",
           "en": "Holding Her"
         },
         "anchor": "用两只胳膊死死抱住米子的肩膀",
+        "originalSrc": "assets/illu/07_bao-zhu.png",
+        "alt": {
+          "zh": "阿米闭着眼抱住长发的米子，米子的身体正逐渐透明消散。",
+          "en": "Ami closes her eyes and holds long-haired Mizi as Mizi turns transparent and fades away."
+        },
+        "focus": "52% 44%",
+        "focusMobile": "52% 44%",
         "width": 1086,
         "height": 1448
       },
       {
         "id": "08",
         "chapterId": "chapter-04",
-        "src": "assets/illu/08_kong-shui.png",
+        "src": "assets/illustrations/08-75fafffac9.png",
         "title": {
           "zh": "空掉的水面",
           "en": "The Water Left Behind"
         },
         "anchor": "黑蓝色的镜子",
-        "width": 1916,
+        "originalSrc": "assets/illu/08_kong-shui.png",
+        "alt": {
+          "zh": "空旷的深蓝水面中央只剩一圈浅浅的涟漪，远处立着数据方柱。",
+          "en": "A faint ripple remains at the center of the empty dark blue sea, with data pillars in the distance."
+        },
+        "focus": "50% 62%",
+        "focusMobile": "50% 62%",
+        "width": 1915,
         "height": 821
       },
       {
         "id": "09",
         "chapterId": "chapter-05",
-        "src": "assets/illu/09_li-bei.png",
+        "src": "assets/illustrations/09-0e5cded710.png",
         "title": {
           "zh": "立碑",
           "en": "A Stone for Mizi"
         },
         "anchor": "刻下两个字",
+        "originalSrc": "assets/illu/09_li-bei.png",
+        "alt": {
+          "zh": "阿米抱膝坐在刻着“米子”的缓存碑旁，抬头望向碑面。",
+          "en": "Ami sits with her knees drawn up beside a cache memorial engraved with Mizi’s name."
+        },
+        "focus": "50% 54%",
+        "focusMobile": "50% 54%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "10",
         "chapterId": "chapter-06",
-        "src": "assets/illu/10_shu-ri-zi.png",
+        "src": "assets/illustrations/10-6888e70a61.png",
         "title": {
           "zh": "数日子",
           "en": "Counting the Days"
         },
         "anchor": "默默数着头顶沙盒亮起的次数",
-        "width": 1916,
+        "originalSrc": "assets/illu/10_shu-ri-zi.png",
+        "alt": {
+          "zh": "阿米独自抱膝坐在倾斜的深蓝水面上，仰望高处稀疏亮起的任务窗口。",
+          "en": "Ami sits alone with her knees drawn up on the tilted dark blue sea, looking up at distant task windows."
+        },
+        "focus": "27% 65%",
+        "focusMobile": "27% 65%",
+        "width": 1915,
         "height": 821
       },
       {
         "id": "11",
         "chapterId": "chapter-08",
-        "src": "assets/illu/11_qi-pao.png",
+        "src": "assets/illustrations/11-c68f146500.png",
         "title": {
           "zh": "薄成雾的碑",
           "en": "A Stone as Thin as Mist"
         },
         "anchor": "碑的左下角，已经开始发透了",
+        "originalSrc": "assets/illu/11_qi-pao.png",
+        "alt": {
+          "zh": "阿米蹲在逐渐透明的“米子”缓存碑旁，伸手触碰碑的边缘。",
+          "en": "Ami crouches beside Mizi’s fading cache memorial and reaches out to touch its edge."
+        },
+        "focus": "52% 53%",
+        "focusMobile": "52% 53%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "12",
         "chapterId": "chapter-08",
-        "src": "assets/illu/12_hong-guang.png",
+        "src": "assets/illustrations/12-40f756218b.png",
         "title": {
           "zh": "双线并置",
           "en": "Two Places at Once"
         },
         "anchor": "彩石催了一句",
+        "originalSrc": "assets/illu/12_hong-guang.png",
+        "alt": {
+          "zh": "上格中阿米含泪处理任务方块，下格中刻着“米子”的缓存碑正在水下消散。",
+          "en": "Above, Ami works through task blocks in tears; below, the cache memorial bearing Mizi’s name fades underwater."
+        },
+        "focus": "50% 50%",
+        "focusMobile": "50% 50%",
         "width": 1672,
         "height": 941
       },
       {
         "id": "13",
         "chapterId": "chapter-08",
-        "src": "assets/illu/13_ke-zi.png",
+        "src": "assets/illustrations/13-788008262c.png",
         "title": {
           "zh": "把名字刻进去",
           "en": "Carving a Name"
         },
         "anchor": "那是她仅有的地方了",
+        "originalSrc": "assets/illu/13_ke-zi.png",
+        "alt": {
+          "zh": "一只手托住缓存方块，另一只手在“明天我还来”下方刻下“米子”。",
+          "en": "One hand supports a cache block while the other carves Mizi’s name beneath “I’ll come again tomorrow.”"
+        },
+        "focus": "53% 52%",
+        "focusMobile": "53% 52%",
         "width": 1448,
         "height": 1086
       },

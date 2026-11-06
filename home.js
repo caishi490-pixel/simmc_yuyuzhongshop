@@ -142,13 +142,6 @@
     audio.addEventListener('play', soundUI);
   }
 
-  const artworkLink = $('artwork-link');
-  if (artworkLink) {
-    artworkLink.innerHTML = ds.icon('picture');
-    artworkLink.href = ds.href('gallery.html');
-    artworkLink.setAttribute('aria-label', ds.t('浏览插画', 'Browse artwork'));
-  }
-
   document.addEventListener('ds:language', initUI);
   initUI();
 })();

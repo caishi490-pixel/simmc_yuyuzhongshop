@@ -90,7 +90,7 @@
     });
   }
 
-  const figureHtml = (a, paraIdx) => '<figure class="fade-in-figure" data-art-id="' + ds.esc(a.id) + '" data-after-paragraph="' + paraIdx + '"><a href="' + ds.href('gallery.html?art=' + a.id) + '"><img src="' + ds.esc(a.src) + '" alt="' + ds.esc(ds.text(a.alt || a.title)) + '" loading="lazy" decoding="async"' + (a.width && a.height ? ' width="' + a.width + '" height="' + a.height + '"' : '') + '></a><figcaption>' + ds.esc(ds.text(a.title)) + '</figcaption></figure>';
+  const figureHtml = (a, paraIdx) => '<figure class="fade-in-figure" data-art-id="' + ds.esc(a.id) + '" data-after-paragraph="' + paraIdx + '"><img src="' + ds.esc(a.src) + '" alt="' + ds.esc(ds.text(a.alt || a.title)) + '" loading="lazy" decoding="async"' + (a.width && a.height ? ' width="' + a.width + '" height="' + a.height + '"' : '') + '><figcaption>' + ds.esc(ds.text(a.title)) + '</figcaption></figure>';
 
   function stopStreaming() {
     if (autoAdvanceTimer) {
@@ -526,7 +526,7 @@
   });
 
   document.addEventListener('click', e => {
-    if (e.defaultPrevented || e.target.closest('header, .reading-toolbar, .reading-hud, select, button, a')) return;
+    if (e.defaultPrevented || e.target.closest('header, .reading-toolbar, .reading-hud, figure, select, button, a')) return;
     handleUserNextAction();
   });
 
